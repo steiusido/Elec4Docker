@@ -18,7 +18,7 @@ function PlaceholderSection({
           RESERVED SECTION
         </p>
         <h2 className="mt-3 text-2xl font-bold text-gray-900">{title}</h2>
-        <p className="mt-2 text-sm text-gray-600">Assigned group: {assignedGroup}</p>
+        <p className="mt-2 text-sm text-gray-600">{assignedGroup}</p>
       </div>
     </section>
   );
@@ -55,12 +55,6 @@ export default function LandingPage() {
               placeholders and should be implemented by their assigned groups.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="#mission-vision"
-                className="rounded-full border border-[#6f4d12] px-5 py-2 text-sm font-semibold text-[#6f4d12] hover:bg-[#6f4d12] hover:text-white"
-              >
-                View Assigned Sections
-              </a>
               <Link
                 to="/departments"
                 className="rounded-full bg-[#2a1d0b] px-5 py-2 text-sm font-semibold text-white hover:bg-black"

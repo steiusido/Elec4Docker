@@ -14,9 +14,13 @@ export default function Navbar({
   const links = useMemo(
     () => [
       { id: "home" as const, label: "Home" },
-      { id: "about" as const, label: "About" },
-      { id: "facilities" as const, label: "Facilities" },
-      { id: "news" as const, label: "News" },
+      { id: "about" as const, label: "Program Overview" },
+      { id: "peo" as const, label: "PEO" },
+      { id: "so" as const, label: "SO" },
+      { id: "curriculum" as const, label: "Curriculum" },
+      { id: "laboratories" as const, label: "Laboratories" },
+      { id: "faculty" as const, label: "Faculty" },
+      { id: "careers" as const, label: "Careers" },
     ],
     []
   );
@@ -37,7 +41,7 @@ export default function Navbar({
         </button>
 
         {/* Center nav */}
-        <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-10 text-sm text-gray-500">
+        <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6 text-xs text-gray-500">
           {links.map((l) => (
             <button
               key={l.id}

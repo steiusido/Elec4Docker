@@ -1,20 +1,24 @@
-import { useEffect } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useEffect, useMemo } from "react";
+import { Link, Navigate, useParams } from "react-router-dom";
 import Navbar from "../components/navbar";
 import SectionTitle from "../components/SectionTitle";
 import Footer from "../components/Footer";
 
 import { departments, type DeptCode } from "../data/department";
+import { mergeDeptWithOverrides } from "../lib/departmentAdmin";
 
 export default function DepartmentPage() {
   const { deptCode } = useParams();
 
   const code = (deptCode?.toUpperCase() || "") as DeptCode;
-  const dept = departments[code];
+  const baseDept = departments[code];
+  const dept = useMemo(
+    () => (baseDept ? mergeDeptWithOverrides(baseDept) : undefined),
+    [baseDept]
+  );
 
-  if (!dept) return <Navigate to="/" replace />;
+  if (!dept) return <Navigate to="/departments" replace />;
 
-  // ✅ change tab title + favicon per department
   useEffect(() => {
     document.title = `${dept.code} | BULSU COE`;
 
@@ -23,7 +27,6 @@ export default function DepartmentPage() {
       (document.querySelector("link[rel~='icon']") as HTMLLinkElement | null);
 
     if (link) {
-      // put icons in: public/icons/ce.svg, public/icons/mee.svg, etc.
       link.href = `/icons/${dept.code.toLowerCase()}.svg`;
     }
   }, [dept.code]);
@@ -35,17 +38,22 @@ export default function DepartmentPage() {
 
   return (
     <div className="bg-white">
-      <Navbar
-        onNav={onNav}
-      />
+      <Navbar onNav={onNav} />
 
-      {/* HERO */}
       <section id="home" className="max-w-6xl mx-auto px-6 pt-10">
         <div className="text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-wide text-gray-900">
             {dept.title}
           </h1>
           <p className="mt-2 text-sm text-gray-500">{dept.subtitle}</p>
+          <div className="mt-5">
+            <Link
+              to={`/dept/${dept.code}/admin`}
+              className="inline-flex items-center rounded-full border border-[#a90000] px-5 py-2 text-sm font-semibold text-[#a90000] hover:bg-[#a90000] hover:text-white"
+            >
+              Open Department Admin
+            </Link>
+          </div>
         </div>
 
         <div className="mt-8 grid grid-cols-12 gap-5">
@@ -93,7 +101,6 @@ export default function DepartmentPage() {
         </div>
       </section>
 
-      {/* PROGRAM OVERVIEW */}
       <section id="about" className="max-w-6xl mx-auto px-6 pt-10">
         <div className="text-left">
           <div className="text-sm font-semibold text-gray-900">
@@ -104,7 +111,7 @@ export default function DepartmentPage() {
           </p>
         </div>
 
-        <div className="mt-10 grid grid-cols-3 gap-6 text-center">
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
           <Stat
             value={dept.programOverview.stats.nonTeaching}
             label="Non-Teaching Personnel"
@@ -123,7 +130,6 @@ export default function DepartmentPage() {
         </div>
       </section>
 
-      {/* PEO */}
       <section id="peo" className="max-w-6xl mx-auto px-6 pt-16">
         <SectionTitle
           center
@@ -153,7 +159,6 @@ export default function DepartmentPage() {
         </div>
       </section>
 
-      {/* SO */}
       <section id="so" className="max-w-6xl mx-auto px-6 pt-16">
         <SectionTitle
           center
@@ -169,7 +174,6 @@ export default function DepartmentPage() {
         </div>
       </section>
 
-      {/* CURRICULUM */}
       <section id="curriculum" className="max-w-6xl mx-auto px-6 pt-16">
         <div className="grid grid-cols-12 gap-8 items-start">
           <div className="col-span-12 md:col-span-6">
@@ -205,6 +209,70 @@ export default function DepartmentPage() {
               />
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="laboratories" className="max-w-6xl mx-auto px-6 pt-16">
+        <SectionTitle
+          center
+          eyebrow={dept.title}
+          title={dept.laboratories.title}
+          subtitle="Department laboratories and learning spaces"
+        />
+
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5">
+          {dept.laboratories.items.map((lab, idx) => (
+            <div key={idx} className="rounded-2xl border bg-white p-6">
+              <div className="text-xs font-semibold text-gray-400">LAB {idx + 1}</div>
+              <h3 className="mt-2 text-base font-bold text-gray-900">{lab}</h3>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="faculty" className="max-w-6xl mx-auto px-6 pt-16">
+        <SectionTitle center eyebrow={dept.title} title={dept.faculty.title} />
+
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-5">
+          {dept.faculty.members.map((member, idx) => (
+            <div
+              key={`${member.name}-${idx}`}
+              className="rounded-2xl border bg-white p-6"
+            >
+              <h3 className="font-bold text-gray-900">{member.name}</h3>
+              <p className="mt-1 text-sm text-gray-600">{member.role}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="careers" className="max-w-6xl mx-auto px-6 pt-16">
+        <SectionTitle
+          center
+          eyebrow={dept.title}
+          title={dept.careers.title}
+          subtitle={dept.careers.subtitle}
+        />
+
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5">
+          {dept.careers.cards.map((card, idx) => (
+            <div key={idx} className="rounded-2xl border bg-white p-6 text-center">
+              <div className="text-3xl" aria-hidden="true">
+                {card.icon}
+              </div>
+              <h3 className="mt-4 font-bold text-gray-900">{card.title}</h3>
+              <p className="mt-2 text-sm text-gray-600">{card.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="contact" className="max-w-6xl mx-auto px-6 pt-16">
+        <div className="rounded-2xl border bg-gray-50 p-6 md:p-8">
+          <h2 className="text-xl font-bold text-gray-900">Department Contact</h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Add contact details for {dept.title} in this section.
+          </p>
         </div>
       </section>
 
@@ -245,7 +313,7 @@ function OutcomeCard({ title, text }: { title: string; text: string }) {
   return (
     <div className="rounded-2xl border bg-white p-6 text-center">
       <div className="mx-auto w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center">
-        ✅
+        OK
       </div>
       <div className="mt-4 font-semibold text-gray-900">{title}</div>
       <div className="mt-2 text-sm text-gray-500">{text}</div>
