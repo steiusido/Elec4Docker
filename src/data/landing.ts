@@ -13,7 +13,7 @@ export type LandingHeroData = {
   primaryButtonHref: string;
 };
 
-export const landingPageData: {
+export type LandingPageData = {
   hero: LandingHeroData;
   sections: {
     missionVision: LandingSectionData;
@@ -24,7 +24,9 @@ export const landingPageData: {
     contact: LandingSectionData;
     footer: LandingSectionData;
   };
-} = {
+};
+
+export const landingPageData: LandingPageData = {
   hero: {
     eyebrow: "LANDING PAGE • HERO SECTION",
     title: "Bulacan State University\nCollege of Engineering",

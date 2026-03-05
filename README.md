@@ -22,6 +22,7 @@ npm run build
 ## Routes
 
 - `/` Landing page
+- `/admin` Landing admin editor
 - `/departments` Department selector
 - `/dept/:deptCode` Department page
 - `/dept/:deptCode/admin` Department admin editor

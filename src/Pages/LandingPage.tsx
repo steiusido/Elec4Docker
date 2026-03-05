@@ -3,6 +3,7 @@ import {
   landingPageData,
   type LandingSectionData,
 } from "../data/landing";
+import { mergeLandingWithOverrides } from "../lib/landingAdmin";
 
 type SectionProps = {
   data: LandingSectionData;
@@ -79,19 +80,27 @@ function SectionCard({ data }: SectionProps) {
 }
 
 export default function LandingPage() {
-  const { hero, sections } = landingPageData;
+  const { hero, sections } = mergeLandingWithOverrides(landingPageData);
 
   return (
     <div className="min-h-screen bg-white">
       <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <h1 className="font-extrabold tracking-wide text-lg">BULSU COE</h1>
-          <Link
-            to="/departments"
-            className="rounded-full bg-[#a90000] px-5 py-2 text-sm font-semibold text-white hover:bg-[#8f0000]"
-          >
-            Department Pages
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              to="/admin"
+              className="rounded-full border border-gray-400 px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50"
+            >
+              Landing Admin
+            </Link>
+            <Link
+              to="/departments"
+              className="rounded-full bg-[#a90000] px-5 py-2 text-sm font-semibold text-white hover:bg-[#8f0000]"
+            >
+              Department Pages
+            </Link>
+          </div>
         </div>
       </header>
 

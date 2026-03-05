@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import DepartmentSelect from "./Pages/DepartmentSelect";
 import DepartmentAdminPage from "./Pages/DepartmentAdminPage";
+import LandingAdminPage from "./Pages/LandingAdminPage";
 import LandingPage from "./Pages/LandingPage";
 import CEPage from "./Pages/departments/CE";
 import CPEPage from "./Pages/departments/CPE";
@@ -19,6 +20,7 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/admin" element={<LandingAdminPage />} />
         <Route path="/departments" element={<DepartmentSelect />} />
         <Route path="/dept/CE" element={<CEPage />} />
         <Route path="/dept/CPE" element={<CPEPage />} />
