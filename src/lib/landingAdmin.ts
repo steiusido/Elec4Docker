@@ -1,9 +1,19 @@
 import { landingPageData, type LandingPageData } from "../data/landing";
+import { mergeWithShape } from "./jsonShape";
 
 export type LandingEditableContent = LandingPageData;
 
 const STORAGE_KEY = "landing-admin";
 const DRAFT_KEY = "landing-admin-draft";
+
+function parseStoredLandingContent(raw: string): LandingEditableContent | null {
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    return mergeWithShape(landingPageData, parsed);
+  } catch {
+    return null;
+  }
+}
 
 export function loadLandingOverrides(): LandingEditableContent | null {
   if (typeof window === "undefined") return null;
@@ -11,11 +21,7 @@ export function loadLandingOverrides(): LandingEditableContent | null {
   const raw = window.localStorage.getItem(STORAGE_KEY);
   if (!raw) return null;
 
-  try {
-    return JSON.parse(raw) as LandingEditableContent;
-  } catch {
-    return null;
-  }
+  return parseStoredLandingContent(raw);
 }
 
 export function saveLandingOverrides(content: LandingEditableContent) {
@@ -34,11 +40,7 @@ export function loadLandingDraft(): LandingEditableContent | null {
   const raw = window.localStorage.getItem(DRAFT_KEY);
   if (!raw) return null;
 
-  try {
-    return JSON.parse(raw) as LandingEditableContent;
-  } catch {
-    return null;
-  }
+  return parseStoredLandingContent(raw);
 }
 
 export function saveLandingDraft(content: LandingEditableContent) {
@@ -54,16 +56,7 @@ export function clearLandingDraft() {
 export function mergeLandingWithOverrides(base: LandingPageData): LandingPageData {
   const overrides = loadLandingOverrides();
   if (!overrides) return base;
-
-  return {
-    ...base,
-    ...overrides,
-    hero: { ...base.hero, ...overrides.hero },
-    sections: {
-      ...base.sections,
-      ...overrides.sections,
-    },
-  };
+  return mergeWithShape(base, overrides);
 }
 
 export function getLandingDefaults(): LandingEditableContent {

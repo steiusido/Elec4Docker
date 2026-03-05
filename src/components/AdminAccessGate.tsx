@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   createAdminSession,
   hasAdminSession,
@@ -18,15 +18,20 @@ export default function AdminAccessGate({
   title,
   children,
 }: AdminAccessGateProps) {
-  const existing = useMemo(() => loadAdminCredentials(scopeKey), [scopeKey]);
-
   const [authenticated, setAuthenticated] = useState(() => hasAdminSession(scopeKey));
+  const [hasCredentials, setHasCredentials] = useState(() =>
+    Boolean(loadAdminCredentials(scopeKey))
+  );
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  const isFirstTimeSetup = !existing;
+  useEffect(() => {
+    setHasCredentials(Boolean(loadAdminCredentials(scopeKey)));
+  }, [scopeKey]);
+
+  const isFirstTimeSetup = !hasCredentials;
 
   const logout = () => {
     clearAdminSession(scopeKey);
@@ -53,6 +58,7 @@ export default function AdminAccessGate({
       password,
     });
 
+    setHasCredentials(true);
     createAdminSession(scopeKey);
     setAuthenticated(true);
     setError("");

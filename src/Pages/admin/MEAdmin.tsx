@@ -4,6 +4,7 @@ import {
   clearDeptDraft,
   clearDeptOverrides,
   extractEditableContent,
+  loadDeptDraft,
   loadDeptOverrides,
   saveDeptDraft,
   saveDeptOverrides,
@@ -32,11 +33,12 @@ export default function MEAdminPage() {
         setError("");
         const data = await fetchDepartmentData(code);
         const defaults = extractEditableContent(data);
+        const draft = loadDeptDraft(code);
         const overrides = loadDeptOverrides(code);
 
         if (!isCancelled) {
           setBaseDept(data);
-          setForm(mergeWithShape(defaults, overrides));
+          setForm(mergeWithShape(defaults, draft ?? overrides));
           setStatus("");
         }
       } catch (loadError) {
