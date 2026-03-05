@@ -73,6 +73,12 @@ Route: `/dept/<CODE>/admin`
 - Replace `public/data/departments/<CODE>.json` with exported content.
 - Commit and push that JSON file.
 
+Landing admin route: `/admin`
+
+- Edit landing blocks in form fields.
+- Save local override for preview/testing.
+- Use download/copy output as your handoff snapshot.
+
 ## 6) Required Department Sections
 
 1. Program Overview

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import {
   clearDeptOverrides,
@@ -13,6 +13,8 @@ import {
   type DeptCode,
 } from "../lib/departmentData";
 import type { DepartmentData } from "../types/department";
+import AdminAccessGate from "../components/AdminAccessGate";
+import ResizablePagePreview from "../components/ResizablePagePreview";
 
 export default function DepartmentAdminPage() {
   const { deptCode } = useParams();
@@ -58,11 +60,6 @@ export default function DepartmentAdminPage() {
     };
   }, [code]);
 
-  const previewDept = useMemo(() => {
-    if (!baseDept || !form) return null;
-    return { ...baseDept, ...form };
-  }, [baseDept, form]);
-
   if (!isDeptCode(code)) {
     return <Navigate to="/departments" replace />;
   }
@@ -75,7 +72,7 @@ export default function DepartmentAdminPage() {
     );
   }
 
-  if (!baseDept || !form || !previewDept) {
+  if (!baseDept || !form) {
     return (
       <div className="min-h-screen grid place-items-center px-6 text-center">
         <p className="text-sm text-gray-600">Loading department admin...</p>
@@ -100,7 +97,7 @@ export default function DepartmentAdminPage() {
     updater: (current: T) => T
   ) => items.map((item, idx) => (idx === index ? updater(item) : item));
 
-  const fullJsonText = JSON.stringify(previewDept, null, 2);
+  const fullJsonText = JSON.stringify({ ...baseDept, ...form }, null, 2);
 
   const handleDownloadJson = () => {
     const blob = new Blob([fullJsonText], { type: "application/json" });
@@ -127,9 +124,11 @@ export default function DepartmentAdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="max-w-[1400px] mx-auto px-6 py-10">
-        <div className="grid grid-cols-1 xl:grid-cols-[1.1fr_0.9fr] gap-6">
+    <AdminAccessGate scopeKey={`department-${code}`} title={`${code} Department Admin`}>
+      {({ logout }) => (
+        <div className="min-h-screen bg-gray-100">
+          <div className="max-w-[1400px] mx-auto px-6 py-10">
+            <div className="grid grid-cols-1 xl:grid-cols-[1.1fr_0.9fr] gap-6">
           <div className="rounded-2xl border bg-white p-6 md:p-8">
             <p className="text-xs font-semibold tracking-[0.14em] text-gray-500">
               DEPARTMENT ADMIN
@@ -781,6 +780,13 @@ export default function DepartmentAdminPage() {
               >
                 Reset Local Override
               </button>
+              <button
+                type="button"
+                onClick={logout}
+                className="rounded-full border border-gray-400 px-5 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50"
+              >
+                Logout
+              </button>
               <Link
                 to={`/dept/${baseDept.code}`}
                 className="rounded-full border border-gray-400 px-5 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50"
@@ -792,96 +798,16 @@ export default function DepartmentAdminPage() {
             {status && <p className="mt-4 text-sm text-gray-700">{status}</p>}
           </div>
 
-          <aside className="xl:sticky xl:top-6 xl:self-start rounded-2xl border bg-white p-6">
-            <h2 className="text-lg font-bold text-gray-900">Live Preview</h2>
-            <p className="mt-1 text-xs text-gray-500">
-              Updates as you type. This preview follows your current form values.
-            </p>
-            <DepartmentPreview dept={previewDept} />
-          </aside>
+              <ResizablePagePreview
+                title="Live Preview"
+                description="This is the actual department page rendered in an iframe. Save and reload preview to apply changes."
+                previewUrl={`/dept/${code}`}
+              />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function DepartmentPreview({ dept }: { dept: DepartmentData }) {
-  return (
-    <div className="mt-4 space-y-4 text-sm">
-      <div className="rounded-lg border bg-gray-50 p-4">
-        <p className="text-xs font-semibold tracking-wide text-gray-500">HERO</p>
-        <p className="mt-1 font-bold text-gray-900">{dept.title}</p>
-        <p className="text-xs text-gray-600">{dept.subtitle}</p>
-      </div>
-
-      <PreviewCard title="Program Overview">
-        <p>{dept.programOverview.heading}</p>
-        <p className="mt-1 text-gray-600">{dept.programOverview.text}</p>
-      </PreviewCard>
-
-      <PreviewCard title="PEO">
-        {dept.peo.bullets.map((item, idx) => (
-          <p key={idx} className="text-gray-700">
-            {idx + 1}. {item}
-          </p>
-        ))}
-      </PreviewCard>
-
-      <PreviewCard title="Student Outcomes">
-        {dept.so.outcomes.map((item, idx) => (
-          <p key={idx} className="text-gray-700">
-            {idx + 1}. {item.title}
-          </p>
-        ))}
-      </PreviewCard>
-
-      <PreviewCard title="Curriculum">
-        {dept.curriculum.bullets.map((item, idx) => (
-          <p key={idx} className="text-gray-700">
-            - {item}
-          </p>
-        ))}
-      </PreviewCard>
-
-      <PreviewCard title="Laboratories">
-        {dept.laboratories.items.map((item, idx) => (
-          <p key={idx} className="text-gray-700">
-            - {item}
-          </p>
-        ))}
-      </PreviewCard>
-
-      <PreviewCard title="Faculty">
-        {dept.faculty.members.map((item, idx) => (
-          <p key={idx} className="text-gray-700">
-            {item.name} ({item.role})
-          </p>
-        ))}
-      </PreviewCard>
-
-      <PreviewCard title="Career Opportunities">
-        {dept.careers.cards.map((item, idx) => (
-          <p key={idx} className="text-gray-700">
-            {item.icon} {item.title}
-          </p>
-        ))}
-      </PreviewCard>
-    </div>
-  );
-}
-
-function PreviewCard({
-  title,
-  children,
-}: {
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className="rounded-lg border p-3">
-      <p className="text-xs font-semibold tracking-wide text-gray-500">{title}</p>
-      <div className="mt-2 space-y-1">{children}</div>
-    </div>
+      )}
+    </AdminAccessGate>
   );
 }
 
