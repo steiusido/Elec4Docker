@@ -54,7 +54,6 @@ export type FooterSectionData = BaseLandingSectionData & {
 export type LandingHeroData = {
   eyebrow: string;
   title: string;
-  description: string;
   primaryButtonLabel: string;
   primaryButtonHref: string;
 };
@@ -76,8 +75,6 @@ export const landingPageData: LandingPageData = {
   hero: {
     eyebrow: "LANDING PAGE • HERO SECTION",
     title: "Bulacan State University\nCollege of Engineering",
-    description:
-      "This hero block is active for your group. Other landing sections are placeholders and should be implemented by their assigned groups.",
     primaryButtonLabel: "Enter Department Pages",
     primaryButtonHref: "/departments",
   },

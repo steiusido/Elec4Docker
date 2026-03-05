@@ -193,9 +193,6 @@ export default function LandingPage() {
             <h2 className="mt-4 text-3xl md:text-5xl font-black leading-tight text-[#2a1d0b] whitespace-pre-line">
               {hero.title}
             </h2>
-            <p className="mt-4 max-w-2xl text-sm md:text-base text-[#4a3721]">
-              {hero.description}
-            </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 to={hero.primaryButtonHref}
