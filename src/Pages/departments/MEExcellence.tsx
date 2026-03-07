@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { mergeDeptWithOverrides } from "../../lib/departmentAdmin";
 import { ME } from "../../data/department/ME";
+import { useMEReveal } from "../../components/MEReveal";
 import {
   MEFooter,
   MENavbar,
@@ -11,8 +12,12 @@ import "../../styles/departments/ME.css";
 
 export default function MEExcellencePage() {
   const [baseDept] = useState<typeof ME>(ME);
+  const mainRef = useRef<HTMLElement | null>(null);
 
   const dept = useMemo(() => mergeDeptWithOverrides(baseDept), [baseDept]);
+  const revealStyle = (delay = 0) => ({ "--me-delay": `${delay}ms` } as CSSProperties);
+
+  useMEReveal(mainRef, `${dept.code}-excellence`);
 
   useEffect(() => {
     document.title = `${dept.code} Performance | BULSU COE`;
@@ -42,14 +47,16 @@ export default function MEExcellencePage() {
           { label: "Program", kind: "route", to: `/dept/${dept.code}` },
           { label: "Licensure", kind: "scroll", target: "licensure" },
           { label: "Research", kind: "scroll", target: "research" },
+          { label: "Feedback", kind: "scroll", target: "feedback" },
+          { label: "Global", kind: "scroll", target: "global" },
           { label: "Community", kind: "scroll", target: "community" },
           { label: "Alumni", kind: "scroll", target: "alumni" },
         ]}
       />
 
-      <main className="me-shell">
+      <main ref={mainRef} className="me-shell">
         <section className="me-hero">
-          <div className="me-hero__copy">
+          <div className="me-hero__copy" data-me-reveal="left" style={revealStyle(0)}>
             <p className="me-eyebrow">ME Performance, Research, and Service</p>
             <h1 className="me-display-title">{dept.excellencePage.title}</h1>
             <p className="me-hero__kicker">
@@ -102,7 +109,7 @@ export default function MEExcellencePage() {
             </div>
           </div>
 
-          <article className="me-panel me-panel--feature">
+          <article className="me-panel me-panel--feature" data-me-reveal="right" style={revealStyle(80)}>
             <p className="me-panel__tag">What This Page Covers</p>
             <h2 className="me-panel__title">An evidence-backed view of ME beyond the overview</h2>
             <p className="me-panel__body">
@@ -151,11 +158,17 @@ export default function MEExcellencePage() {
             eyebrow="Board Exam Performance"
             title={dept.licensure.title}
             text={dept.licensure.intro}
+            revealDelay={40}
           />
 
           <div className="me-card-grid">
-            {dept.licensure.benchmarks.map((benchmark) => (
-              <article key={benchmark.exam} className="me-panel">
+            {dept.licensure.benchmarks.map((benchmark, index) => (
+              <article
+                key={benchmark.exam}
+                className="me-panel"
+                data-me-reveal="up"
+                style={revealStyle(90 + index * 70)}
+              >
                 <p className="me-panel__tag">{benchmark.exam}</p>
                 <h3 className="me-panel__title">{benchmark.schoolRate} school passing rate</h3>
                 <p className="me-panel__body">
@@ -167,8 +180,13 @@ export default function MEExcellencePage() {
           </div>
 
           <div className="me-outcome-grid">
-            {dept.licensure.topnotchers.map((topnotcher) => (
-              <article key={`${topnotcher.name}-${topnotcher.year}`} className="me-outcome-card">
+            {dept.licensure.topnotchers.map((topnotcher, index) => (
+              <article
+                key={`${topnotcher.name}-${topnotcher.year}`}
+                className="me-outcome-card"
+                data-me-reveal="up"
+                style={revealStyle(110 + index * 45)}
+              >
                 <span className="me-outcome-card__number">{topnotcher.rank}</span>
                 <h3 className="me-outcome-card__title">{topnotcher.name}</h3>
                 <p className="me-outcome-card__text">
@@ -184,11 +202,17 @@ export default function MEExcellencePage() {
             eyebrow="Research Culture"
             title={dept.research.title}
             text={dept.research.intro}
+            revealDelay={40}
           />
 
           <div className="me-card-grid">
-            {dept.research.metrics.map((metric) => (
-              <article key={metric.label} className="me-panel">
+            {dept.research.metrics.map((metric, index) => (
+              <article
+                key={metric.label}
+                className="me-panel"
+                data-me-reveal="up"
+                style={revealStyle(90 + index * 60)}
+              >
                 <p className="me-panel__tag">Research Metric</p>
                 <h3 className="me-panel__title">{metric.value}</h3>
                 <p className="me-panel__body">{metric.label}</p>
@@ -197,7 +221,7 @@ export default function MEExcellencePage() {
             ))}
           </div>
 
-          <article className="me-panel me-panel--wide">
+          <article className="me-panel me-panel--wide" data-me-reveal="up" style={revealStyle(160)}>
             <p className="me-panel__tag">Named Contributors</p>
             <h3 className="me-panel__title">Faculty and utilization notes from the evidence</h3>
 
@@ -212,16 +236,109 @@ export default function MEExcellencePage() {
           </article>
         </section>
 
+        <section id="feedback" className="me-section">
+          <MESectionHeading
+            eyebrow="Improvement Loop"
+            title={dept.feedback.title}
+            text={dept.feedback.intro}
+            revealDelay={40}
+          />
+
+          <div className="me-detail-grid">
+            <article className="me-panel" data-me-reveal="up" style={revealStyle(90)}>
+              <p className="me-panel__tag">Learner Satisfaction</p>
+              <h3 className="me-panel__title">How student feedback reshapes delivery</h3>
+              <div className="me-bullet-list">
+                {dept.feedback.learner.map((item) => (
+                  <div key={item} className="me-bullet-list__item">
+                    <span className="me-bullet-list__dot" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            <article className="me-panel" data-me-reveal="up" style={revealStyle(150)}>
+              <p className="me-panel__tag">Graduate Satisfaction</p>
+              <h3 className="me-panel__title">How alumni experience is interpreted</h3>
+              <div className="me-bullet-list">
+                {dept.feedback.graduate.map((item) => (
+                  <div key={item} className="me-bullet-list__item">
+                    <span className="me-bullet-list__dot" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
+
+          <article className="me-panel me-panel--wide" data-me-reveal="up" style={revealStyle(210)}>
+            <p className="me-panel__tag">Program Design Recognition</p>
+            <h3 className="me-panel__title">Board-performance recognition in the evidence set</h3>
+            <div className="me-bullet-list">
+              {dept.feedback.recognition.map((item) => (
+                <div key={item} className="me-bullet-list__item">
+                  <span className="me-bullet-list__dot" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </article>
+        </section>
+
+        <section id="global" className="me-section">
+          <MESectionHeading
+            eyebrow="Global Exposure"
+            title={dept.international.title}
+            text={dept.international.intro}
+            revealDelay={40}
+          />
+
+          <div className="me-detail-grid">
+            <article className="me-panel" data-me-reveal="up" style={revealStyle(90)}>
+              <p className="me-panel__tag">Student Mobility</p>
+              <h3 className="me-panel__title">International learning and industry exposure</h3>
+              <div className="me-bullet-list">
+                {dept.international.mobility.map((item) => (
+                  <div key={item} className="me-bullet-list__item">
+                    <span className="me-bullet-list__dot" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            <article className="me-panel" data-me-reveal="up" style={revealStyle(150)}>
+              <p className="me-panel__tag">Innovation Visibility</p>
+              <h3 className="me-panel__title">WURI and international engagement signals</h3>
+              <div className="me-bullet-list">
+                {dept.international.innovation.map((item) => (
+                  <div key={item} className="me-bullet-list__item">
+                    <span className="me-bullet-list__dot" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
+        </section>
+
         <section id="community" className="me-section">
           <MESectionHeading
             eyebrow="Extension and Service"
             title={dept.extension.title}
             text={dept.extension.intro}
+            revealDelay={40}
           />
 
           <div className="me-detail-grid">
-            {dept.extension.projects.map((project) => (
-              <article key={`${project.year}-${project.title}`} className="me-list-card">
+            {dept.extension.projects.map((project, index) => (
+              <article
+                key={`${project.year}-${project.title}`}
+                className="me-list-card"
+                data-me-reveal="up"
+                style={revealStyle(90 + index * 60)}
+              >
                 <p className="me-list-card__index">{project.year}</p>
                 <h3 className="me-panel__title">{project.title}</h3>
                 <p className="me-list-card__text">{project.text}</p>
@@ -229,7 +346,7 @@ export default function MEExcellencePage() {
             ))}
           </div>
 
-          <article className="me-panel me-panel--wide">
+          <article className="me-panel me-panel--wide" data-me-reveal="up" style={revealStyle(180)}>
             <p className="me-panel__tag">Recognition and Institutional Support</p>
             <h3 className="me-panel__title">Awards connected to service-oriented engineering</h3>
 
@@ -249,11 +366,17 @@ export default function MEExcellencePage() {
             eyebrow="Alumni Recognition"
             title={dept.alumni.title}
             text="The evidence file also points to graduates recognized for international excellence, science, and technology leadership."
+            revealDelay={40}
           />
 
           <div className="me-card-grid">
-            {dept.alumni.members.map((member) => (
-              <article key={member.name} className="me-career-card">
+            {dept.alumni.members.map((member, index) => (
+              <article
+                key={member.name}
+                className="me-career-card"
+                data-me-reveal="up"
+                style={revealStyle(90 + index * 70)}
+              >
                 <span className="me-career-card__code">ALUM</span>
                 <h3 className="me-career-card__title">{member.name}</h3>
                 <p className="me-panel__body">{member.role}</p>
@@ -262,7 +385,7 @@ export default function MEExcellencePage() {
             ))}
           </div>
 
-          <article className="me-cta-panel">
+          <article className="me-cta-panel" data-me-reveal="scale" style={revealStyle(180)}>
             <div>
               <p className="me-panel__tag">Keep The Main Page Clean</p>
               <h3 className="me-cta-panel__title">Use this route for deep-dive ME content</h3>

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 
 type ScrollNavItem = {
@@ -132,14 +133,22 @@ export function MESectionHeading({
   title,
   text,
   centered = false,
+  revealDelay = 0,
+  revealVariant = "up",
 }: {
   eyebrow: string;
   title: string;
   text: string;
   centered?: boolean;
+  revealDelay?: number;
+  revealVariant?: "up" | "left" | "right" | "scale";
 }) {
   return (
-    <div className={centered ? "me-section-heading me-section-heading--center" : "me-section-heading"}>
+    <div
+      className={centered ? "me-section-heading me-section-heading--center" : "me-section-heading"}
+      data-me-reveal={revealVariant}
+      style={{ "--me-delay": `${revealDelay}ms` } as CSSProperties}
+    >
       <p className="me-eyebrow">{eyebrow}</p>
       <h2 className="me-section-title">{title}</h2>
       <p className="me-section-copy">{text}</p>
@@ -153,23 +162,35 @@ export function MEMediaSlot({
   title,
   text,
   className = "",
+  revealDelay = 0,
+  revealVariant = "up",
 }: {
   src: string;
   alt: string;
   title: string;
   text: string;
   className?: string;
+  revealDelay?: number;
+  revealVariant?: "up" | "left" | "right" | "scale";
 }) {
   if (src.trim()) {
     return (
-      <div className={`me-media-slot ${className}`}>
+      <div
+        className={`me-media-slot ${className}`}
+        data-me-reveal={revealVariant}
+        style={{ "--me-delay": `${revealDelay}ms` } as CSSProperties}
+      >
         <img src={src} alt={alt} className="me-media-slot__image" />
       </div>
     );
   }
 
   return (
-    <div className={`me-media-slot me-media-slot--placeholder ${className}`}>
+    <div
+      className={`me-media-slot me-media-slot--placeholder ${className}`}
+      data-me-reveal={revealVariant}
+      style={{ "--me-delay": `${revealDelay}ms` } as CSSProperties}
+    >
       <div className="me-media-slot__placeholder">
         <p className="me-media-slot__label">Image Placeholder</p>
         <h3 className="me-media-slot__title">{title}</h3>

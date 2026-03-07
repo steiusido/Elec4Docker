@@ -27,6 +27,15 @@ const imageKeys = [
   "watermark",
 ] as const;
 
+const legacyImageValues = {
+  heroLeft: "/departments/ME/hero-left.png",
+  heroBig: "/departments/ME/hero-big.png",
+  heroSmall1: "/departments/ME/hero-small-1.png",
+  heroSmall2: "/departments/ME/hero-small-2.png",
+  peo: "/departments/ME/peo.png",
+  watermark: "/departments/ME/watermark.png",
+} as const;
+
 const previewPages = {
   program: {
     label: "Program Page",
@@ -61,7 +70,7 @@ const sectionGuides = [
   {
     title: "Performance Page Content",
     description: "These sections drive /dept/ME/excellence.",
-    keys: ["licensure", "research", "extension", "alumni", "excellencePage"],
+    keys: ["licensure", "research", "feedback", "international", "extension", "alumni", "excellencePage"],
   },
   {
     title: "Shared Content",
@@ -124,6 +133,7 @@ export default function MEAdminPage() {
 
   const fullJsonText = JSON.stringify(form, null, 2);
   const currentPreview = previewPages[previewPage];
+  const hasLegacyStockImages = imageKeys.some((key) => form.images[key] === legacyImageValues[key]);
 
   const handleSave = () => {
     saveDeptOverrides(code, form);
@@ -173,6 +183,27 @@ export default function MEAdminPage() {
       };
     });
     setStatus(`Updated images.${key}`);
+    setJsonError("");
+  };
+
+  const setImageValues = (
+    resolver: (key: ImageKey, currentValue: string) => string,
+    message: string
+  ) => {
+    setForm((prev) => {
+      if (!prev) return prev;
+
+      const nextImages = { ...prev.images };
+      imageKeys.forEach((key) => {
+        nextImages[key] = resolver(key, prev.images[key]);
+      });
+
+      return {
+        ...prev,
+        images: nextImages,
+      };
+    });
+    setStatus(message);
     setJsonError("");
   };
 
@@ -290,16 +321,49 @@ export default function MEAdminPage() {
                     <p className="me-admin__section-label">Image Slots</p>
                     <h2 className="me-admin__section-title">Upload actual images or keep placeholders</h2>
                   </div>
-                  <p className="me-admin__section-copy">
-                    If an image value is blank, the page shows the gray placeholder with the guide text.
-                  </p>
+                  <div className="me-admin__section-tools">
+                    <p className="me-admin__section-copy">
+                      If an image value is blank, the page shows the gray placeholder with the guide text.
+                    </p>
+                    <div className="me-admin__image-actions">
+                      <button
+                        type="button"
+                        className="me-admin__button me-admin__button--ghost"
+                        onClick={() =>
+                          setImageValues(() => "", "All image slots switched back to placeholders.")
+                        }
+                      >
+                        Use Placeholder For All
+                      </button>
+                      {hasLegacyStockImages ? (
+                        <button
+                          type="button"
+                          className="me-admin__button me-admin__button--ghost"
+                          onClick={() =>
+                            setImageValues(
+                              (key, currentValue) =>
+                                currentValue === legacyImageValues[key] ? "" : currentValue,
+                              "Legacy stock-art image values were converted to placeholders."
+                            )
+                          }
+                        >
+                          Clear Legacy Stock Art
+                        </button>
+                      ) : null}
+                    </div>
+                  </div>
                 </div>
 
                 <div className="me-admin__image-grid">
                   {imageKeys.map((key) => {
                     const currentValue = form.images[key];
                     const meta = baseDept.imagePlaceholders[key];
-                    const filename = currentValue.startsWith("data:") ? "Local upload (data URL)" : currentValue;
+                    const isLegacyValue = currentValue === legacyImageValues[key];
+                    const filename = currentValue.startsWith("data:")
+                      ? "Local upload (data URL)"
+                      : isLegacyValue
+                        ? "Legacy stock-art path still active"
+                        : currentValue;
 
                     return (
                       <article key={key} className="me-admin__image-card">

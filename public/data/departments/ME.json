@@ -251,11 +251,48 @@
         "value": "9",
         "label": "Awarded works",
         "detail": "Best paper, presenter, and WURI-related recognitions."
+      },
+      {
+        "value": "10",
+        "label": "Utilized innovations and knowledge products",
+        "detail": "Documented through technology licensing, utility models, industrial designs, and extension use cases."
       }
     ],
     "people": [
       "Research-active faculty named in the evidence include Engr. Flores, Engr. Bernardo, Engr. Camilon, Engr. Palao, Engr. Sarmiento, and Engr. Marias.",
       "Utilized patents and knowledge products were associated with Flores, Sarmiento, and Bernardo."
+    ]
+  },
+  "feedback": {
+    "title": "Feedback and Satisfaction Mechanisms",
+    "intro": "The evidence file treats learner and graduate feedback as an engineering-style improvement loop that informs delivery, assessment, and long-term program alignment.",
+    "learner": [
+      "Grade consultations are used as scheduled one-on-one feedback sessions so students understand performance and faculty can detect where instruction missed the intended learning outcomes.",
+      "Constructive assignment feedback is tied to actionable revision, including multimodal support such as video tutorials for difficult topics.",
+      "Feedback analysis is used to revise assessment rubrics and to move some learning experiences away from purely high-stakes testing toward project-based work."
+    ],
+    "graduate": [
+      "Graduate satisfaction is framed as a diagnostic mechanism for the transition from student life to professional mechanical engineering practice.",
+      "The evidence emphasizes alignment, employability, and whether the department environment gave graduates the tools to redefine professional limits rather than simply complete a curriculum.",
+      "This mechanism supports continuous review of how BulSU ME prepares graduates beyond examination performance alone."
+    ],
+    "recognition": [
+      "The evidence compilation notes BulSU appearances in PRC performance-of-schools records for Mechanical Engineering board examinations across 2018 and 2019.",
+      "For August 2019, the evidence identifies BulSU as one of the top performing schools under PRC criteria with roughly a 90.07 percent pass rate."
+    ]
+  },
+  "international": {
+    "title": "International and Innovation Outlook",
+    "intro": "Beyond local program delivery, the evidence points to student mobility, international conference participation, and innovation rankings that extend ME-related activity into broader global exposure.",
+    "mobility": [
+      "The I-Shou University Summer Camp 2025 in Kaohsiung, Taiwan provided a two-week international learning and cultural experience for 18 engineering students and 2 faculty members.",
+      "Participants visited ASE Group and attended a career orientation linked to the INTENSE Program, opening possible internship and employment pathways in high-technology industries.",
+      "The evidence also references support for ASEAN International Mobility for Students through the Kun Shan University winter camp documentation."
+    ],
+    "innovation": [
+      "BulSU placed 41st in the WURI 2024 Crisis Management category and 36th in Support for Global Resilience, showing how innovation and extension work gained international visibility.",
+      "IRCITS 2019 gathered around 180 participants and presenters from universities and industries, local and international, around green engineering, materials, renewable energy, food safety, and ICT.",
+      "International faculty engagement in 2024 further aligned university activity with sustainability, quality, and transformational outcomes-based education."
     ]
   },
   "licensure": {

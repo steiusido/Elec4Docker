@@ -21,6 +21,33 @@
     linear-gradient(180deg, #f0e6d8 0%, var(--me-canvas) 24%, #fcfaf7 100%);
 }
 
+[data-me-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+  transition:
+    opacity 720ms cubic-bezier(0.2, 0.7, 0.1, 1),
+    transform 720ms cubic-bezier(0.2, 0.7, 0.1, 1);
+  transition-delay: var(--me-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+[data-me-reveal="left"] {
+  transform: translate3d(-34px, 0, 0);
+}
+
+[data-me-reveal="right"] {
+  transform: translate3d(34px, 0, 0);
+}
+
+[data-me-reveal="scale"] {
+  transform: scale(0.96);
+}
+
+[data-me-reveal].is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
 .me-shell {
   width: min(1180px, calc(100% - 2rem));
   margin: 0 auto;
@@ -133,6 +160,7 @@
 .me-metric-card {
   border: 1px solid rgba(67, 80, 93, 0.12);
   box-shadow: 0 18px 52px rgba(37, 31, 26, 0.08);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
 .me-hero__copy {
@@ -286,6 +314,7 @@
   border-radius: 1.8rem;
   overflow: hidden;
   background: #d6dde5;
+  transition: transform 220ms ease, box-shadow 220ms ease;
 }
 
 .me-media-slot__image {
@@ -582,6 +611,7 @@
   border-radius: 1.15rem;
   background: rgba(255, 255, 255, 0.66);
   border: 1px solid rgba(67, 80, 93, 0.08);
+  transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .me-member-card__name {
@@ -716,6 +746,22 @@
   text-align: center;
   color: var(--me-muted);
   border-top: 1px solid rgba(123, 17, 19, 0.08);
+}
+
+.me-panel:hover,
+.me-outcome-card:hover,
+.me-career-card:hover,
+.me-list-card:hover,
+.me-metric-card:hover,
+.me-member-card:hover,
+.me-media-slot:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 40px rgba(31, 36, 44, 0.12);
+}
+
+.me-hero__copy:hover,
+.me-cta-panel:hover {
+  box-shadow: 0 24px 54px rgba(31, 36, 44, 0.12);
 }
 
 @media (min-width: 760px) {
@@ -860,5 +906,25 @@
 
   .me-display-title {
     font-size: 2.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-me-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .me-panel,
+  .me-outcome-card,
+  .me-career-card,
+  .me-list-card,
+  .me-cta-panel,
+  .me-metric-card,
+  .me-member-card,
+  .me-media-slot,
+  .me-button {
+    transition: none;
   }
 }

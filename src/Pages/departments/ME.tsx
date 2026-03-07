@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { mergeDeptWithOverrides } from "../../lib/departmentAdmin";
 import { ME } from "../../data/department/ME";
+import { useMEReveal } from "../../components/MEReveal";
 import {
   MEFooter,
   MEMediaSlot,
@@ -12,8 +13,12 @@ import "../../styles/departments/ME.css";
 
 export default function MEPage() {
   const [baseDept] = useState<typeof ME>(ME);
+  const mainRef = useRef<HTMLElement | null>(null);
 
   const dept = useMemo(() => mergeDeptWithOverrides(baseDept), [baseDept]);
+  const revealStyle = (delay = 0) => ({ "--me-delay": `${delay}ms` } as CSSProperties);
+
+  useMEReveal(mainRef, dept.code);
 
   useEffect(() => {
     document.title = `${dept.code} | BULSU COE`;
@@ -49,9 +54,9 @@ export default function MEPage() {
         ]}
       />
 
-      <main className="me-shell">
+      <main ref={mainRef} className="me-shell">
         <section id="home" className="me-hero">
-          <div className="me-hero__copy">
+          <div className="me-hero__copy" data-me-reveal="left" style={revealStyle(0)}>
             <p className="me-eyebrow">{dept.hero.eyebrow}</p>
             <h1 className="me-display-title">{dept.title}</h1>
             <p className="me-hero__kicker">{dept.hero.kicker}</p>
@@ -88,6 +93,8 @@ export default function MEPage() {
               title={dept.imagePlaceholders.heroBig.title}
               text={dept.imagePlaceholders.heroBig.text}
               className="me-media-slot--wide"
+              revealVariant="right"
+              revealDelay={80}
             />
             <MEMediaSlot
               src={dept.images.heroLeft}
@@ -95,6 +102,8 @@ export default function MEPage() {
               title={dept.imagePlaceholders.heroLeft.title}
               text={dept.imagePlaceholders.heroLeft.text}
               className="me-media-slot--tall"
+              revealVariant="right"
+              revealDelay={140}
             />
             <MEMediaSlot
               src={dept.images.heroSmall1}
@@ -102,6 +111,8 @@ export default function MEPage() {
               title={dept.imagePlaceholders.heroSmall1.title}
               text={dept.imagePlaceholders.heroSmall1.text}
               className="me-media-slot--square"
+              revealVariant="right"
+              revealDelay={200}
             />
             <MEMediaSlot
               src={dept.images.heroSmall2}
@@ -109,6 +120,8 @@ export default function MEPage() {
               title={dept.imagePlaceholders.heroSmall2.title}
               text={dept.imagePlaceholders.heroSmall2.text}
               className="me-media-slot--square"
+              revealVariant="right"
+              revealDelay={260}
             />
           </div>
         </section>
@@ -118,10 +131,11 @@ export default function MEPage() {
             eyebrow="Program Profile"
             title={dept.programOverview.heading}
             text={dept.programOverview.text}
+            revealDelay={40}
           />
 
           <div className="me-overview-grid">
-            <article className="me-panel me-panel--prose">
+            <article className="me-panel me-panel--prose" data-me-reveal="up" style={revealStyle(80)}>
               <p className="me-panel__lead">
                 The current evidence package places Mechanical Engineering at the intersection of
                 accreditation, curriculum review, research productivity, and service-oriented
@@ -140,8 +154,13 @@ export default function MEPage() {
             </article>
 
             <div className="me-card-grid">
-              {dept.programOverview.cards.map((card) => (
-                <article key={card.title} className="me-panel">
+              {dept.programOverview.cards.map((card, index) => (
+                <article
+                  key={card.title}
+                  className="me-panel"
+                  data-me-reveal="up"
+                  style={revealStyle(130 + index * 70)}
+                >
                   <p className="me-panel__tag">ME Signal</p>
                   <h3 className="me-panel__title">{card.title}</h3>
                   <p className="me-panel__body">{card.text}</p>
@@ -151,8 +170,13 @@ export default function MEPage() {
           </div>
 
           <div className="me-stat-strip">
-            {dept.programOverview.stats.map((stat) => (
-              <article key={stat.label} className="me-stat-chip">
+            {dept.programOverview.stats.map((stat, index) => (
+              <article
+                key={stat.label}
+                className="me-stat-chip"
+                data-me-reveal="up"
+                style={revealStyle(120 + index * 70)}
+              >
                 <span className="me-stat-chip__value">{stat.value}</span>
                 <span className="me-stat-chip__label">{stat.label}</span>
               </article>
@@ -165,6 +189,7 @@ export default function MEPage() {
             eyebrow="Graduate Direction"
             title={dept.peo.title}
             text={dept.peo.subtitle}
+            revealDelay={40}
           />
 
           <div className="me-split-grid">
@@ -174,11 +199,18 @@ export default function MEPage() {
               title={dept.imagePlaceholders.peo.title}
               text={dept.imagePlaceholders.peo.text}
               className="me-media-slot--portrait"
+              revealVariant="left"
+              revealDelay={80}
             />
 
             <div className="me-stack-list">
               {dept.peo.bullets.map((bullet, index) => (
-                <article key={bullet} className="me-list-card">
+                <article
+                  key={bullet}
+                  className="me-list-card"
+                  data-me-reveal="up"
+                  style={revealStyle(130 + index * 70)}
+                >
                   <p className="me-list-card__index">PEO {index + 1}</p>
                   <p className="me-list-card__text">{bullet}</p>
                 </article>
@@ -193,11 +225,17 @@ export default function MEPage() {
             title={dept.so.title}
             text={dept.so.subtitle}
             centered
+            revealDelay={40}
           />
 
           <div className="me-outcome-grid">
             {dept.so.outcomes.map((outcome, index) => (
-              <article key={outcome.title} className="me-outcome-card">
+              <article
+                key={outcome.title}
+                className="me-outcome-card"
+                data-me-reveal="up"
+                style={revealStyle(90 + index * 60)}
+              >
                 <span className="me-outcome-card__number">0{index + 1}</span>
                 <h3 className="me-outcome-card__title">{outcome.title}</h3>
                 <p className="me-outcome-card__text">{outcome.text}</p>
@@ -211,10 +249,11 @@ export default function MEPage() {
             eyebrow="How The Program Is Built"
             title={dept.curriculum.title}
             text={dept.curriculum.text}
+            revealDelay={40}
           />
 
           <div className="me-curriculum-grid">
-            <article className="me-panel me-panel--feature">
+            <article className="me-panel me-panel--feature" data-me-reveal="left" style={revealStyle(80)}>
               <p className="me-panel__tag">Revision Notes</p>
               <div className="me-bullet-list">
                 {dept.curriculum.bullets.map((item) => (
@@ -227,8 +266,13 @@ export default function MEPage() {
             </article>
 
             <div className="me-focus-grid">
-              {dept.curriculum.focusAreas.map((item) => (
-                <article key={item.title} className="me-panel">
+              {dept.curriculum.focusAreas.map((item, index) => (
+                <article
+                  key={item.title}
+                  className="me-panel"
+                  data-me-reveal="up"
+                  style={revealStyle(120 + index * 70)}
+                >
                   <p className="me-panel__tag">Focus Area</p>
                   <h3 className="me-panel__title">{item.title}</h3>
                   <p className="me-panel__body">{item.text}</p>
@@ -238,7 +282,7 @@ export default function MEPage() {
           </div>
 
           <div className="me-detail-grid">
-            <article className="me-panel me-panel--wide">
+            <article className="me-panel me-panel--wide" data-me-reveal="up" style={revealStyle(100)}>
               <p className="me-panel__tag">Industry and Stakeholder Input</p>
               <h3 className="me-panel__title">{dept.industryPanel.title}</h3>
               <p className="me-panel__body">{dept.industryPanel.intro}</p>
@@ -254,7 +298,7 @@ export default function MEPage() {
               </div>
             </article>
 
-            <article className="me-panel me-panel--wide">
+            <article className="me-panel me-panel--wide" data-me-reveal="up" style={revealStyle(160)}>
               <p className="me-panel__tag">Facilities To Document</p>
               <h3 className="me-panel__title">{dept.laboratories.title}</h3>
               <p className="me-panel__body">{dept.laboratories.intro}</p>
@@ -275,6 +319,8 @@ export default function MEPage() {
                   title={dept.imagePlaceholders.watermark.title}
                   text={dept.imagePlaceholders.watermark.text}
                   className="me-media-slot--compact"
+                  revealVariant="scale"
+                  revealDelay={220}
                 />
               </div>
             </article>
@@ -287,11 +333,17 @@ export default function MEPage() {
             title={dept.careers.title}
             text={dept.careers.subtitle}
             centered
+            revealDelay={40}
           />
 
           <div className="me-career-grid">
-            {dept.careers.cards.map((card) => (
-              <article key={card.title} className="me-career-card">
+            {dept.careers.cards.map((card, index) => (
+              <article
+                key={card.title}
+                className="me-career-card"
+                data-me-reveal="up"
+                style={revealStyle(90 + index * 70)}
+              >
                 <span className="me-career-card__code">{card.code}</span>
                 <h3 className="me-career-card__title">{card.title}</h3>
                 <p className="me-career-card__text">{card.text}</p>
@@ -299,7 +351,7 @@ export default function MEPage() {
             ))}
           </div>
 
-          <article className="me-cta-panel">
+          <article className="me-cta-panel" data-me-reveal="scale" style={revealStyle(180)}>
             <div>
               <p className="me-panel__tag">Secondary Page</p>
               <h3 className="me-cta-panel__title">{dept.excellencePage.title}</h3>
