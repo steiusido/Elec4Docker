@@ -1,0 +1,285 @@
+.me-admin {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(123, 17, 19, 0.08), transparent 24rem),
+    linear-gradient(180deg, #f7f0e8 0%, #f3f4f6 100%);
+}
+
+.me-admin__layout {
+  width: min(1480px, calc(100% - 1.5rem));
+  margin: 0 auto;
+  padding: 1.25rem 0 1.5rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.me-admin__workspace {
+  display: grid;
+  gap: 1rem;
+}
+
+.me-admin__panel {
+  border-radius: 1.75rem;
+  border: 1px solid rgba(123, 17, 19, 0.08);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 48px rgba(30, 41, 59, 0.08);
+  padding: 1.35rem;
+}
+
+.me-admin__eyebrow,
+.me-admin__section-label,
+.me-admin__image-key {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #7b1113;
+}
+
+.me-admin__title {
+  margin: 0.55rem 0 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 0.98;
+  font-weight: 900;
+  color: #1f2937;
+}
+
+.me-admin__copy,
+.me-admin__guide-copy,
+.me-admin__section-copy,
+.me-admin__image-copy,
+.me-admin__image-value,
+.me-admin__status,
+.me-admin__error {
+  color: #5f6b79;
+  line-height: 1.65;
+}
+
+.me-admin__copy {
+  margin: 0.75rem 0 0;
+  max-width: 52rem;
+}
+
+.me-admin__toolbar,
+.me-admin__links,
+.me-admin__actions,
+.me-admin__json-actions,
+.me-admin__image-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.me-admin__toolbar {
+  margin-top: 1.1rem;
+}
+
+.me-admin__links {
+  margin-top: 1rem;
+}
+
+.me-admin__toggle-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.me-admin__pill,
+.me-admin__button,
+.me-admin__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(123, 17, 19, 0.14);
+  background: #fff;
+  color: #7b1113;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.me-admin__pill:hover,
+.me-admin__pill:focus-visible,
+.me-admin__button:hover,
+.me-admin__button:focus-visible,
+.me-admin__link:hover,
+.me-admin__link:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(31, 41, 55, 0.1);
+  outline: none;
+}
+
+.me-admin__pill--active,
+.me-admin__button--primary {
+  border-color: #7b1113;
+  background: #7b1113;
+  color: #fff;
+}
+
+.me-admin__button--ghost {
+  background: #fff;
+  color: #334155;
+}
+
+.me-admin__guide-grid,
+.me-admin__image-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.me-admin__guide-card,
+.me-admin__image-card {
+  border-radius: 1.3rem;
+  border: 1px solid rgba(67, 80, 93, 0.1);
+  background: linear-gradient(180deg, rgba(248, 244, 239, 0.92), rgba(255, 255, 255, 0.98));
+  padding: 1rem;
+}
+
+.me-admin__guide-title,
+.me-admin__section-title,
+.me-admin__image-title {
+  margin: 0.4rem 0 0;
+  font-size: 1.18rem;
+  font-weight: 900;
+  color: #1f2937;
+}
+
+.me-admin__guide-copy,
+.me-admin__image-copy {
+  margin: 0.55rem 0 0;
+  font-size: 0.92rem;
+}
+
+.me-admin__chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.me-admin__chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(123, 17, 19, 0.08);
+  color: #7b1113;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.me-admin__section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.85rem;
+}
+
+.me-admin__section-copy {
+  margin: 0;
+  max-width: 28rem;
+  font-size: 0.92rem;
+}
+
+.me-admin__image-value {
+  margin: 0.85rem 0 0;
+  padding: 0.75rem 0.85rem;
+  border-radius: 1rem;
+  background: rgba(241, 245, 249, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  font-size: 0.84rem;
+  word-break: break-word;
+}
+
+.me-admin__editor-shell {
+  margin-top: 1rem;
+}
+
+.me-admin__json-editor {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.me-admin__textarea {
+  width: 100%;
+  min-height: 30rem;
+  resize: vertical;
+  border-radius: 1.2rem;
+  border: 1px solid rgba(100, 116, 139, 0.22);
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 1rem;
+  font: 500 0.88rem/1.65 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.me-admin__textarea:focus {
+  outline: 2px solid rgba(123, 17, 19, 0.32);
+  outline-offset: 2px;
+}
+
+.me-admin__status,
+.me-admin__error {
+  margin: 1rem 0 0;
+  font-size: 0.92rem;
+}
+
+.me-admin__error {
+  color: #b91c1c;
+}
+
+.me-admin__preview {
+  min-width: 0;
+}
+
+.me-admin__preview > * {
+  height: 100%;
+}
+
+@media (min-width: 760px) {
+  .me-admin__guide-grid,
+  .me-admin__image-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .me-admin__layout {
+    grid-template-columns: minmax(0, 1.05fr) minmax(460px, 0.95fr);
+    align-items: start;
+  }
+
+  .me-admin__preview {
+    position: sticky;
+    top: 1.25rem;
+  }
+}
+
+@media (max-width: 759px) {
+  .me-admin__layout {
+    width: min(100% - 1rem, 1480px);
+  }
+
+  .me-admin__panel {
+    padding: 1rem;
+  }
+
+  .me-admin__pill,
+  .me-admin__button,
+  .me-admin__link {
+    width: 100%;
+  }
+
+  .me-admin__toggle-group {
+    width: 100%;
+  }
+}

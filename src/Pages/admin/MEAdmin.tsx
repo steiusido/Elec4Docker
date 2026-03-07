@@ -9,13 +9,13 @@ import {
   loadDeptOverrides,
   saveDeptDraft,
   saveDeptOverrides,
-  type DepartmentEditableContent,
 } from "../../lib/departmentAdmin";
 import { mergeWithShape } from "../../lib/jsonShape";
-import type { DepartmentData } from "../../types/department";
+import { ME } from "../../data/department/ME";
 import AdminAccessGate from "../../components/AdminAccessGate";
 import JsonValueEditor from "../../components/JsonValueEditor";
 import ResizablePagePreview from "../../components/ResizablePagePreview";
+import "../../styles/admin/MEAdmin.css";
 
 const code = "ME" as const;
 const imageKeys = [
@@ -27,39 +27,89 @@ const imageKeys = [
   "watermark",
 ] as const;
 
+const previewPages = {
+  program: {
+    label: "Program Page",
+    route: `/dept/${code}`,
+    previewUrl: `/dept/${code}?preview=dept`,
+    description: "Main Mechanical Engineering page with hero, overview, outcomes, curriculum, and careers.",
+  },
+  excellence: {
+    label: "Performance Page",
+    route: `/dept/${code}/excellence`,
+    previewUrl: `/dept/${code}/excellence?preview=dept`,
+    description: "Secondary ME page for licensure, research, community engineering, and alumni highlights.",
+  },
+} as const;
+
+const sectionGuides = [
+  {
+    title: "Main Page Content",
+    description: "These sections drive /dept/ME.",
+    keys: [
+      "hero",
+      "programOverview",
+      "accreditation",
+      "peo",
+      "so",
+      "curriculum",
+      "industryPanel",
+      "laboratories",
+      "careers",
+    ],
+  },
+  {
+    title: "Performance Page Content",
+    description: "These sections drive /dept/ME/excellence.",
+    keys: ["licensure", "research", "extension", "alumni", "excellencePage"],
+  },
+  {
+    title: "Shared Content",
+    description: "These appear across both ME routes.",
+    keys: ["title", "shortTitle", "subtitle", "contact", "images", "imagePlaceholders", "footer"],
+  },
+] as const;
+
 type ImageKey = (typeof imageKeys)[number];
+type PreviewPage = keyof typeof previewPages;
+type EditorMode = "guided" | "json";
 
 export default function MEAdminPage() {
-  const [baseDept, setBaseDept] = useState<DepartmentData | null>(null);
-  const [form, setForm] = useState<DepartmentEditableContent | null>(null);
+  const [baseDept, setBaseDept] = useState<typeof ME | null>(null);
+  const [form, setForm] = useState<typeof ME | null>(null);
   const [status, setStatus] = useState("");
-  const [error, setError] = useState("");
+  const [loadError, setLoadError] = useState("");
+  const [jsonError, setJsonError] = useState("");
+  const [editorMode, setEditorMode] = useState<EditorMode>("guided");
+  const [previewPage, setPreviewPage] = useState<PreviewPage>("program");
+  const [jsonDraft, setJsonDraft] = useState("");
 
   useEffect(() => {
     try {
-      const data = getDeptDefaults(code);
-      const defaults = extractEditableContent(data);
+      const data = getDeptDefaults(code) as typeof ME;
+      const defaults = extractEditableContent(data) as typeof ME;
       const draft = loadDeptDraft(code);
       const overrides = loadDeptOverrides(code);
 
       setBaseDept(data);
-      setForm(mergeWithShape(defaults, draft ?? overrides));
-      setError("");
+      setForm(mergeWithShape(defaults, draft ?? overrides) as typeof ME);
+      setLoadError("");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to load department admin data.";
-      setError(message);
+      setLoadError(message);
     }
   }, []);
 
   useEffect(() => {
     if (!form) return;
     saveDeptDraft(code, form);
+    setJsonDraft(JSON.stringify(form, null, 2));
   }, [form]);
 
-  if (error) {
+  if (loadError) {
     return (
       <div className="min-h-screen grid place-items-center px-6 text-center">
-        <p className="text-sm text-red-700">{error}</p>
+        <p className="text-sm text-red-700">{loadError}</p>
       </div>
     );
   }
@@ -72,19 +122,23 @@ export default function MEAdminPage() {
     );
   }
 
+  const fullJsonText = JSON.stringify(form, null, 2);
+  const currentPreview = previewPages[previewPage];
+
   const handleSave = () => {
     saveDeptOverrides(code, form);
-    setStatus("Saved local admin override for this browser.");
+    setStatus(`Saved local override for ${currentPreview.label.toLowerCase()} content.`);
+    setJsonError("");
   };
 
   const handleReset = () => {
+    const defaults = extractEditableContent(baseDept) as typeof ME;
     clearDeptOverrides(code);
     clearDeptDraft(code);
-    setForm(extractEditableContent(baseDept));
+    setForm(defaults);
     setStatus("Reset complete. Local override removed.");
+    setJsonError("");
   };
-
-  const fullJsonText = JSON.stringify({ ...baseDept, ...form }, null, 2);
 
   const handleDownloadJson = () => {
     const blob = new Blob([fullJsonText], { type: "application/json" });
@@ -113,12 +167,13 @@ export default function MEAdminPage() {
       return {
         ...prev,
         images: {
-          ...(prev.images ?? {}),
+          ...prev.images,
           [key]: value,
         },
       };
     });
     setStatus(`Updated images.${key}`);
+    setJsonError("");
   };
 
   const handleImageUpload = (key: ImageKey, file: File) => {
@@ -135,38 +190,126 @@ export default function MEAdminPage() {
     reader.readAsDataURL(file);
   };
 
+  const handleApplyJson = () => {
+    try {
+      const parsed = JSON.parse(jsonDraft) as unknown;
+      const defaults = extractEditableContent(baseDept) as typeof ME;
+      const next = mergeWithShape(defaults, parsed) as typeof ME;
+
+      setForm(next);
+      setJsonError("");
+      setStatus("Applied raw JSON draft to the ME editor.");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Invalid JSON.";
+      setJsonError(message);
+      setStatus("");
+    }
+  };
+
   return (
     <AdminAccessGate scopeKey={`department-${code}`} title={`${code} Department Admin`}>
       {({ logout }) => (
-        <div className="min-h-screen bg-gray-100">
-          <div className="grid min-h-screen grid-cols-1 xl:grid-cols-[1.1fr_0.9fr] gap-6">
-            <div className="border bg-white p-6 md:p-8">
-              <p className="text-xs font-semibold tracking-[0.14em] text-gray-500">
-                DEPARTMENT ADMIN
-              </p>
-              <h1 className="mt-2 text-3xl font-black text-gray-900">
-                {baseDept.title} Admin Editor
-              </h1>
-              <p className="mt-3 text-sm text-gray-600">
-                Fields are generated from department JSON structure.
-              </p>
-
-              <section className="mt-8 rounded-xl border p-5">
-                <h2 className="text-lg font-bold text-gray-900">ME Image Upload</h2>
-                <p className="mt-1 text-xs text-gray-500">
-                  Upload per-image files for this ME page only. Uploaded files are stored as local data URLs in this browser, then included when downloading JSON.
+        <div className="me-admin">
+          <div className="me-admin__layout">
+            <div className="me-admin__workspace">
+              <section className="me-admin__panel">
+                <p className="me-admin__eyebrow">Department Admin</p>
+                <h1 className="me-admin__title">{baseDept.title} Editor</h1>
+                <p className="me-admin__copy">
+                  This admin now supports both ME routes. Use the page switcher to preview either the
+                  main program page or the performance page while editing the same ME data object.
                 </p>
-                <div className="mt-4 grid gap-3 md:grid-cols-2">
+
+                <div className="me-admin__toolbar">
+                  <div className="me-admin__toggle-group" aria-label="Preview page selection">
+                    {Object.entries(previewPages).map(([key, value]) => (
+                      <button
+                        key={key}
+                        type="button"
+                        className={previewPage === key ? "me-admin__pill me-admin__pill--active" : "me-admin__pill"}
+                        onClick={() => setPreviewPage(key as PreviewPage)}
+                      >
+                        {value.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="me-admin__toggle-group" aria-label="Editor mode selection">
+                    <button
+                      type="button"
+                      className={editorMode === "guided" ? "me-admin__pill me-admin__pill--active" : "me-admin__pill"}
+                      onClick={() => setEditorMode("guided")}
+                    >
+                      Guided Editor
+                    </button>
+                    <button
+                      type="button"
+                      className={editorMode === "json" ? "me-admin__pill me-admin__pill--active" : "me-admin__pill"}
+                      onClick={() => setEditorMode("json")}
+                    >
+                      Raw JSON
+                    </button>
+                  </div>
+                </div>
+
+                <div className="me-admin__links">
+                  <Link to={previewPages.program.route} className="me-admin__link">
+                    Open program page
+                  </Link>
+                  <Link to={previewPages.excellence.route} className="me-admin__link">
+                    Open performance page
+                  </Link>
+                  <Link to={`/dept/${baseDept.code}`} className="me-admin__link">
+                    Open live department page
+                  </Link>
+                </div>
+              </section>
+
+              <section className="me-admin__panel">
+                <p className="me-admin__section-label">Content Map</p>
+                <div className="me-admin__guide-grid">
+                  {sectionGuides.map((guide) => (
+                    <article key={guide.title} className="me-admin__guide-card">
+                      <h2 className="me-admin__guide-title">{guide.title}</h2>
+                      <p className="me-admin__guide-copy">{guide.description}</p>
+                      <div className="me-admin__chip-row">
+                        {guide.keys.map((key) => (
+                          <span key={key} className="me-admin__chip">
+                            {key}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
+
+              <section className="me-admin__panel">
+                <div className="me-admin__section-head">
+                  <div>
+                    <p className="me-admin__section-label">Image Slots</p>
+                    <h2 className="me-admin__section-title">Upload actual images or keep placeholders</h2>
+                  </div>
+                  <p className="me-admin__section-copy">
+                    If an image value is blank, the page shows the gray placeholder with the guide text.
+                  </p>
+                </div>
+
+                <div className="me-admin__image-grid">
                   {imageKeys.map((key) => {
-                    const currentValue = typeof form.images?.[key] === "string" ? form.images[key] : "";
+                    const currentValue = form.images[key];
+                    const meta = baseDept.imagePlaceholders[key];
                     const filename = currentValue.startsWith("data:") ? "Local upload (data URL)" : currentValue;
 
                     return (
-                      <div key={key} className="rounded-lg border p-3">
-                        <p className="text-sm font-semibold text-gray-900">images.{key}</p>
-                        <p className="mt-1 text-xs text-gray-500 break-all">{filename || "No value"}</p>
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          <label className="cursor-pointer rounded-full border border-gray-400 px-3 py-1 text-xs font-semibold text-gray-800 hover:bg-gray-50">
+                      <article key={key} className="me-admin__image-card">
+                        <p className="me-admin__image-key">images.{key}</p>
+                        <h3 className="me-admin__image-title">{meta.title}</h3>
+                        <p className="me-admin__image-copy">{meta.text}</p>
+                        <p className="me-admin__image-value">{filename || "Blank value - placeholder is active"}</p>
+
+                        <div className="me-admin__image-actions">
+                          <label className="me-admin__button me-admin__button--ghost">
                             Upload
                             <input
                               type="file"
@@ -179,86 +322,130 @@ export default function MEAdminPage() {
                               }}
                             />
                           </label>
+
                           <button
                             type="button"
-                            onClick={() => updateImage(key, baseDept.images[key])}
-                            className="rounded-full border border-gray-400 px-3 py-1 text-xs font-semibold text-gray-800 hover:bg-gray-50"
+                            className="me-admin__button me-admin__button--ghost"
+                            onClick={() => updateImage(key, "")}
                           >
-                            Reset to Default
+                            Use Placeholder
+                          </button>
+
+                          <button
+                            type="button"
+                            className="me-admin__button me-admin__button--ghost"
+                            onClick={() => updateImage(key, baseDept.images[key])}
+                          >
+                            Reset Default
                           </button>
                         </div>
-                      </div>
+                      </article>
                     );
                   })}
                 </div>
               </section>
 
-              <section className="mt-8 rounded-xl border p-5">
-                <h2 className="text-lg font-bold text-gray-900">Editable Content</h2>
-                <p className="mt-1 text-xs text-gray-500">
-                  Add/remove keys in JSON and this form updates automatically.
-                </p>
-                <div className="mt-4">
-                  <JsonValueEditor
-                    value={form}
-                    onChange={(next) => setForm(next as DepartmentEditableContent)}
-                  />
+              <section className="me-admin__panel">
+                <div className="me-admin__section-head">
+                  <div>
+                    <p className="me-admin__section-label">Editor</p>
+                    <h2 className="me-admin__section-title">
+                      {editorMode === "guided" ? "Structured field editor" : "Full ME JSON editor"}
+                    </h2>
+                  </div>
+                  <p className="me-admin__section-copy">
+                    {editorMode === "guided"
+                      ? "Use the tree editor for field-by-field changes."
+                      : "Edit the entire ME data object directly and apply it back into the preview."}
+                  </p>
                 </div>
+
+                {editorMode === "guided" ? (
+                  <div className="me-admin__editor-shell">
+                    <JsonValueEditor value={form} onChange={(next) => setForm(next as typeof ME)} />
+                  </div>
+                ) : (
+                  <div className="me-admin__json-editor">
+                    <textarea
+                      value={jsonDraft}
+                      onChange={(event) => setJsonDraft(event.target.value)}
+                      className="me-admin__textarea"
+                      spellCheck={false}
+                    />
+
+                    <div className="me-admin__json-actions">
+                      <button
+                        type="button"
+                        onClick={handleApplyJson}
+                        className="me-admin__button me-admin__button--primary"
+                      >
+                        Apply JSON Draft
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setJsonDraft(fullJsonText)}
+                        className="me-admin__button me-admin__button--ghost"
+                      >
+                        Reset JSON Draft
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {jsonError ? <p className="me-admin__error">JSON error: {jsonError}</p> : null}
               </section>
 
-              <div className="mt-8 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={handleSave}
-                  className="rounded-full bg-[#a90000] px-5 py-2 text-sm font-semibold text-white hover:bg-[#8f0000]"
-                >
-                  Save Local Override
-                </button>
-                <button
-                  type="button"
-                  onClick={handleDownloadJson}
-                  className="rounded-full border border-gray-400 px-5 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50"
-                >
-                  Download {code}.json
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCopyJson}
-                  className="rounded-full border border-gray-400 px-5 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50"
-                >
-                  Copy JSON
-                </button>
-                <button
-                  type="button"
-                  onClick={handleReset}
-                  className="rounded-full border border-gray-400 px-5 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50"
-                >
-                  Reset Local Override
-                </button>
-                <button
-                  type="button"
-                  onClick={logout}
-                  className="rounded-full border border-gray-400 px-5 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50"
-                >
-                  Logout
-                </button>
-                <Link
-                  to={`/dept/${baseDept.code}`}
-                  className="rounded-full border border-gray-400 px-5 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50"
-                >
-                  View Department Page
-                </Link>
-              </div>
+              <section className="me-admin__panel">
+                <div className="me-admin__actions">
+                  <button
+                    type="button"
+                    onClick={handleSave}
+                    className="me-admin__button me-admin__button--primary"
+                  >
+                    Save Local Override
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleDownloadJson}
+                    className="me-admin__button me-admin__button--ghost"
+                  >
+                    Download {code}.json
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCopyJson}
+                    className="me-admin__button me-admin__button--ghost"
+                  >
+                    Copy JSON
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleReset}
+                    className="me-admin__button me-admin__button--ghost"
+                  >
+                    Reset Local Override
+                  </button>
+                  <button
+                    type="button"
+                    onClick={logout}
+                    className="me-admin__button me-admin__button--ghost"
+                  >
+                    Logout
+                  </button>
+                </div>
 
-              {status && <p className="mt-4 text-sm text-gray-700">{status}</p>}
+                {status ? <p className="me-admin__status">{status}</p> : null}
+              </section>
             </div>
 
-            <ResizablePagePreview
-              title="Live Preview"
-              description="This is the actual department page rendered in an iframe. It refreshes automatically while you type."
-              previewUrl={`/dept/${code}?preview=dept`}
-              liveToken={fullJsonText}
-            />
+            <div className="me-admin__preview">
+              <ResizablePagePreview
+                title={`${currentPreview.label} Preview`}
+                description={currentPreview.description}
+                previewUrl={currentPreview.previewUrl}
+                liveToken={fullJsonText}
+              />
+            </div>
           </div>
         </div>
       )}
