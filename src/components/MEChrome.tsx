@@ -57,7 +57,7 @@ export function MENavbar({
         <Link to={`/dept/${dept.code}`} className="me-nav__brand">
           <span className="me-nav__seal">BULSU</span>
           <span>
-            <span className="me-nav__title">Mechanical Engineering</span>
+            <span className="me-nav__title">{dept.shortTitle}</span>
             <span className="me-nav__subtitle">College of Engineering</span>
           </span>
         </Link>
@@ -114,8 +114,10 @@ export function MEFooter({ dept }: { dept: ChromeDept }) {
           <p className="me-footer__eyebrow">Contact</p>
           <div className="me-footer__links">
             <span>{dept.contact.phone}</span>
-            <span>{dept.contact.email}</span>
-            <span>{dept.contact.website}</span>
+            <a href={`mailto:${dept.contact.email}`}>{dept.contact.email}</a>
+            <a href={`https://${dept.contact.website}`} target="_blank" rel="noreferrer">
+              {dept.contact.website}
+            </a>
           </div>
         </div>
       </div>
