@@ -47,7 +47,7 @@ export const ECE = {
 
   peo: {
     title: "Program Educational Objectives (PEO)",
-    subtitle: "Edit PEO subtitle here.",
+    subtitle: "BulSU Electronics Engineering graduates are expected to apply technical competence, continue growing professionally, and contribute responsibly to industry and society.",
     bullets: ["Graduates are industry-competent Electronics Engineer practitioner continually developing their technical skills across disciplines in Electronics Engineering.",
       "Contributes significant and innovative solutions that support national development applying the principles and professional skills of Electronics Engineering.",
       "Graduates are competitive leaders with sense of professional responsibility, social awareness and ethical values."],
