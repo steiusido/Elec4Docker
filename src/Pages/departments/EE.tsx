@@ -86,12 +86,12 @@ export default function EEPage() {
 
       <section id="about" className="max-w-6xl mx-auto px-6 pt-10">
         <div className="text-left">
-          <div className="mt-2 text-lg font-bold text-gray-900">{dept.programOverview.subtitle}</div>
+          <div className="mt-2 text-xl font-bold text-gray-900">{dept.programOverview.subtitle}</div>
 
           {dept.programOverview.contents.map((c, idx) => (
             <div key={idx}>
-              <div className="mt-5 text-sm font-semibold text-red-900">{c.heading}</div>
-              <p className="mt-3 text-sm text-gray-500 leading-relaxed max-w-6xl">{c.text}</p>
+              <div className="mt-5 text-lg font-semibold text-red-900">{c.heading}</div>
+              <p className="mt-3 text-sm text-gray-500 leading-relaxed max-w-6xl text-justify">{c.text}</p>
             </div>
           ))}
 
@@ -117,7 +117,7 @@ export default function EEPage() {
             </div>
           </div>
 
-          <div className="col-span-12 md:col-span-6">
+          <div className="col-span-12 md:col-span-6 text-justify">
             <div className="space-y-5">
               {dept.peo.bullets.map((b, idx) => (
                 <Bullet key={idx} title={`PEO ${idx + 1}`} text={b} />
@@ -155,7 +155,7 @@ export default function EEPage() {
 
             <ul className="mt-6 space-y-4 text-sm text-gray-600">
               {dept.curriculum.bullets.map((b, idx) => (
-                <li key={idx} className="flex flex-col">
+                <li key={idx} className="flex flex-col text-justify">
 
                   {/* Bullet + Title */}
                   <div className="flex items-center gap-2">
@@ -198,8 +198,8 @@ export default function EEPage() {
               <div className="mt-2 h-50 rounded-lg overflow-hidden bg-gray-200">
                 <img src={lab.photo} alt={lab.name} className="w-full h-full object-cover" />
               </div>
-              <h3 className="mt-1 font-bold text-gray-900">{lab.name}</h3>
-              <p className="mt-2 text-sm text-gray-500">{lab.description}</p>
+              <h3 className="mt-1 font-bold text-gray-900 text-center">{lab.name}</h3>
+              <p className="mt-2 text-sm text-gray-500 text-center">{lab.description}</p>
             </div>
           ))}
         </div>
@@ -208,25 +208,25 @@ export default function EEPage() {
       <section id="faculty" className="max-w-6xl mx-auto px-6 pt-16">
         <SectionTitle center eyebrow={dept.title} title={dept.faculty.title} />
 
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 items-stretch">
           {dept.faculty.members.map((member, idx) => (
-            <div
-              key={`${member.name}-${idx}`}
-              className="rounded-4xl border bg-white overflow-hidden shadow-sm hover:shadow-md transition"
+            <div 
+              key={idx} 
+              className="faculty-card-animated flex flex-col h-full group overflow-hidden shadow-sm hover:shadow-xl transition-all"
             >
-              {/* PHOTO CONTAINER */}
-              <div className="w-full h-80 bg-gray-200">
+              {/* PHOTO SECTION */}
+              <div className="w-full h-48 md:h-56 overflow-hidden flex-shrink-0 bg-white">
                 <img
                   src={member.photo || "/faculty/placeholder.png"}
+                  className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   alt={member.name}
-                  className="w-full h-full object-cover"
                 />
               </div>
 
               {/* INFO */}
-              <div className="p-4 text-center">
-                <h3 className="font-bold text-red-800">{member.name}</h3>
-                <p className="mt-1 text-sm text-gray-500">{member.role}</p>
+              <div className="p-3 text-center flex-1 flex flex-col bg-white">
+                <h3 className="font-bold text-sm md:text-md text-red-800 leading-tight">{member.name}</h3>
+                <p className="mt-auto pt-2 text-sm md:text-md text-gray-400">{member.role}</p>
               </div>
             </div>
           ))}

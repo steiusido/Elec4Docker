@@ -158,8 +158,8 @@ export const EE = {
     members: [
       { 
         name: "Engr. Eleazer C. Nabong", 
-        role: "Department Chair",
-        photo: `${base}/logo.png`
+        role: "Program Chair",
+        photo: `${base}/nabong.png`
       },
       { 
         name: "Engr. Arjay R. Alba", 
@@ -169,17 +169,17 @@ export const EE = {
       { 
         name: "Engr. Dennis L. Aguirre", 
         role: "Faculty" ,
-        photo: `${base}/logo.png`
+        photo: `${base}/aguirre.png`
       },
       { 
         name: "Engr. Reynaldo C. Alejandria", 
         role: "Faculty" ,
-        photo: `${base}/logo.png`
+        photo: `${base}/alejandria.png`
       },
       { 
         name: "Engr. Ronan Cadmiel C. Castro", 
         role: "Faculty" ,
-        photo: `${base}/logo.png`
+        photo: `${base}/castro.png`
       },
       { 
         name: "Engr. John Byrone A. Clavio", 
@@ -189,27 +189,27 @@ export const EE = {
       { 
         name: "Engr. John Paul V. Dela Cruz", 
         role: "Faculty" ,
-        photo: `${base}/logo.png`
+        photo: `${base}/dela_cruz.png`
       },
       { 
         name: "Engr. Jovita SP. Domingo", 
         role: "Faculty" ,
-        photo: `${base}/logo.png`
+        photo: `${base}/domingo.png`
       },
       { 
         name: "Engr. Riah Ann DR. Fermin-Cayanan", 
         role: "Faculty",
-        photo: `${base}/logo.png` 
+        photo: `${base}/cayanan.png` 
       },
       { 
         name: "Engr. Nhowel F. Jimenez", 
         role: "Faculty",
-        photo: `${base}/logo.png`
+        photo: `${base}/jimenez.png`
       },
       { 
         name: "Engr. Mark Adrian R. Lunaria", 
         role: "Faculty" ,
-        photo: `${base}/logo.png`
+        photo: `${base}/lunaria.png`
       },
       { 
         name: "Engr. Erwin DR. Magsakay", 
@@ -219,32 +219,32 @@ export const EE = {
       { 
         name: "Engr. Mark Louie D. Martinez", 
         role: "Faculty",
-        photo: `${base}/logo.png`
+        photo: `${base}/martinez.png`
       },
       { 
         name: "Engr. Rogelio C. Pimentel", 
         role: "Faculty" ,
-        photo: `${base}/logo.png`
+        photo: `${base}/pimentel.png`
       },
       { 
         name: "Engr. Anthony T. Reyes", 
         role: "Faculty" ,
-        photo: `${base}/logo.png`
+        photo: `${base}/reyes.png`
       },
       { 
         name: "Engr. Ronel I. Serrano", 
         role: "Faculty" ,
-        photo: `${base}/logo.png`
+        photo: `${base}/serrano.png`
       },
       { 
         name: "Engr. Allan Clark H. Timoteo", 
         role: "Faculty" ,
-        photo: `${base}/logo.png`
+        photo: `${base}/timoteo.png`
       },
       { 
         name: "Engr. Diane H. Villanueva", 
         role: "Faculty" ,
-        photo: `${base}/logo.png`
+        photo: `${base}/villanueva.png`
       },
     ]
   },
