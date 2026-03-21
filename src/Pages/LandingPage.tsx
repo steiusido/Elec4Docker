@@ -10,11 +10,42 @@ type Sections = LandingPageData["sections"];
 
 function MissionVisionSection({ data }: { data: Sections["missionVision"] }) {
   return (
-    <section id="mission-vision" className="max-w-6xl mx-auto px-6 py-10">
-      <SectionCard data={data}>
-        <p className="mt-3 text-sm text-gray-600">Mission: {data.missionText}</p>
-        <p className="mt-1 text-sm text-gray-600">Vision: {data.visionText}</p>
-      </SectionCard>
+    <section id="mission-vision" className="max-w-6xl mx-auto px-6 py-24">
+      <div className="grid gap-12 md:grid-cols-2">
+        {/* Mission Card */}
+        <div className="group relative rounded-[2rem] bg-gradient-to-br from-[#a90000] to-[#7a0000] p-[1px] transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl
+      hover:shadow-[#a90000]/30">
+          <div className="h-full w-full rounded-[2rem] bg-white p-10 transition-all duration-500 group-hover:bg-white/95">
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#a90000]/10 text-[#a90000] transition-colors duration-500 group-hover:bg-[#a90000]
+      group-hover:text-white group-hover:rotate-12">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+                strokeLinejoin="round"><path d="M12 13V2l8 4-8 4Z" /><path d="M20.55 10.23A9 9 0 1 1 8 4.94" /><path d="M8 10.5a2.5 2.5 0 1 0 5 0 2.5 2.5 0 1 0-5 0Z" /></svg>
+            </div>
+            <h3 className="mt-8 text-3xl font-black text-gray-900 tracking-tight">MISSION</h3>
+            <div className="mt-4 h-1.5 w-16 bg-[#a90000] rounded-full transition-all duration-500 group-hover:w-32" />
+            <p className="mt-8 text-xl text-gray-600 leading-relaxed font-medium">
+              {data.missionText}
+            </p>
+          </div>
+        </div>
+
+        {/* Vision Card */}
+        <div className="group relative rounded-[2rem] bg-gradient-to-br from-[#d6b26f] to-[#b8860b] p-[1px] transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl
+      hover:shadow-[#d6b26f]/30">
+          <div className="h-full w-full rounded-[2rem] bg-white p-10 transition-all duration-500 group-hover:bg-white/95">
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#d6b26f]/20 text-[#2a1d0b] transition-colors duration-500 group-hover:bg-[#d6b26f]
+      group-hover:text-[#2a1d0b] group-hover:-rotate-12">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+                strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
+            </div>
+            <h3 className="mt-8 text-3xl font-black text-gray-900 tracking-tight">VISION</h3>
+            <div className="mt-4 h-1.5 w-16 bg-[#d6b26f] rounded-full transition-all duration-500 group-hover:w-32" />
+            <p className="mt-8 text-xl text-gray-600 leading-relaxed font-medium">
+              {data.visionText}
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
