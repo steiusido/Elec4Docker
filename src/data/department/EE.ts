@@ -108,9 +108,190 @@ export const EE = {
     ]
   },
 
- curriculum: {
+  curriculum: {
     title: "Curriculum Overview",
-    text: "Edit curriculum overview paragraph here.",
+    text: "The 2024 Revised Bachelor of Science in Electrical Engineering curriculum...",
+    years: [
+      {
+        id: "1st-Year", label: "First Year",
+        terms: [
+          {
+            name: "First Semester",
+            courses: [
+              { code: "COE 102", title: "Calculus 1 (Differential Calculus)", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "COE 103", title: "Chemistry for Engineers", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "COE 103L", title: "Chemistry for Engineers - Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "None", coreq: "None" }, 
+              { code: "ETH 101", title: "Ethics", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "MMW 101", title: "Mathematics in the Modern World", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "UTS 101", title: "Understanding the Self", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "COE 100", title: "Mathematics for Engineers", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "COE 101", title: "Introduction to Engineering", lab_units: 0, lab_hours: 0, lec_units: 1, lec_hours: 1, prereq: "None", coreq: "None" }, 
+              { code: "PAL 101", title: "GE Elective 1 (Panitikan at Lipunan)", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "PCM 101", title: "Purposive Communication", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "PE 10", title: "PATHFit 1", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "None", coreq: "None" }, 
+              { code: "NSTP 10", title: "National Service Training Program 1", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "TOTAL", title: "", lab_units: 1, lab_hours: 3, lec_units: 27, lec_hours: 30, prereq: "", coreq: "" }, 
+            ]
+          },
+          {
+            name: "Second Semester",
+            courses: [
+              { code: "COE 104", title: "Calculus 2", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "COE 102", coreq: "None" }, 
+              { code: "EE 100", title: "Mathematics for Electrical Engineers", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "COE 100", coreq: "None" }, 
+              { code: "EE 101", title: "EE Orientation", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "COE 101", coreq: "None" }, 
+              { code: "EE 102D", title: "EE Drawing", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "COE 100", coreq: "None" }, 
+              { code: "COE 105", title: "Physics for Engineers", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "COE 102", coreq: "COE 104" }, 
+              { code: "COE 105L", title: "Physics for Engineers - Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "COE 102", coreq: "COE104, COE105" }, 
+              { code: "RPH 101", title: "Readings in Philippine History", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "TCW 101", title: "The Contemporary World", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "AAP 101", title: "Art Appreciation", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "COE 106", title: "Engineering Data Analysis", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "COE 102", coreq: "None" }, 
+              { code: "PE 11", title: "PATHFit 2", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "PE 10", coreq: "None" }, 
+              { code: "NSTP 11", title: "National Service Training Program 2", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "NSTP 10", coreq: "None" }, 
+              { code: "TOTAL", title: "", lab_units: 2, lab_hours: 6, lec_units: 24, lec_hours: 27, prereq: "", coreq: "" },
+            ]
+          }
+        ]
+      },
+
+      {
+        id: "2nd-Year", label: "Second Year",
+        terms: [
+          {
+            name: "First Semester",
+            courses: [
+              { code: "COE 201", title: "Differential Equations", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "COE 104 / EE 100", coreq: "None" }, 
+              { code: "EE 201", title: "Electrical Circuits 1", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 100, EE 101, COE 104, COE 105/105L", coreq: "EE 201L" }, 
+              { code: "EE 201L", title: "Electrical Circuits 1 - Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 100, EE 101, COE 104, COE 105/105L", coreq: "EE 201" }, 
+              { code: "EE 202", title: "Engineering Mechanics", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "COE 105/105L", coreq: "None" }, 
+              { code: "EET 203D", title: "Electrical Engineering Technology", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 101", coreq: "EE 201/201L" }, 
+              { code: "EE 204", title: "Basic Thermodynamics", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "COE 105/105L", coreq: "None" }, 
+              { code: "EE 205L", title: "Computer Programming", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "None", coreq: "None" }, 
+              { code: "EE 206L", title: "Computer-Aided Drafting", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 102D", coreq: "None" }, 
+              { code: "RLW 101", title: "Life and Works of Rizal", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "COE 103L", title: "Chemistry for Engineers - Lab", lab_units: 0, lab_hours: 0, lec_units: 0, lec_hours: 0, prereq: "None", coreq: "None" }, 
+              { code: "AE 101", title: "GE Elective 2 (Academic English)", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "SSP 101d", title: "GE Elective 3 (The Entrepreneurial Mind)", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "PE 12", title: "PATHFit 3", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "PE 11", coreq: "None" }, 
+              { code: "TOTAL", title: "", lab_units: 4, lab_hours: 12, lec_units: 22, lec_hours: 22, prereq: "", coreq: "" }, 
+            ]
+          },
+          {
+            name: "Second Semester",
+            courses: [
+              { code: "EE 208", title: "Engineering Math for EE", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "COE 201", coreq: "None" }, 
+              { code: "EE 209", title: "Fundamentals of Deformable Bodies", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "EE 202", coreq: "None" }, 
+              { code: "EE 210", title: "Electrical Circuits 2", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 201/201L", coreq: "None" }, 
+              { code: "EE 210L", title: "Electrical Circuits 2 - Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 201/201L", coreq: "EE 201" }, 
+              { code: "EE 211", title: "Electronic Circuits: Devices and Analysis", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 201/201L", coreq: "None" }, 
+              { code: "EE 211L", title: "Electronic Circuits: Devices and Analysis - Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 201/201L", coreq: "EE 211" }, 
+              { code: "EE 212", title: "Fluid Mechanics", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "COE 105/105L", coreq: "None" }, 
+              { code: "EE 213", title: "Electromagnetics", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "COE 105/105L, COE 201", coreq: "None" }, 
+              { code: "EE 214", title: "Environmental Science and Engineering", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "None", coreq: "None" }, 
+              { code: "EE 215", title: "Information Technology", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "EE 205L, EE 206L", coreq: "None" }, 
+              { code: "EE 216", title: "Engineering Economics", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "COE 106", coreq: "None" }, 
+              { code: "STS 101", title: "Science, Technology and Society", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "None", coreq: "None" }, 
+              { code: "PE 13", title: "PATHFit 4", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "PE 12", coreq: "None" }, 
+              { code: "TOTAL", title: "", lab_units: 2, lab_hours: 6, lec_units: 27, lec_hours: 27, prereq: "", coreq: "" },
+            ]
+          }
+        ]
+      },
+
+      {
+        id: "3rd-Year", label: "Third Year",
+        terms: [
+          {
+            name: "First Semester",
+            courses: [
+              { code: "EE 300", title: "EE Law, Codes and Professional Ethics", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "ETH 101", coreq: "None" }, 
+              { code: "EE 301", title: "Electrical Circuits 3", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 210/210L", coreq: "None" }, 
+              { code: "EE 301L", title: "Electrical Circuits 3 - Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 210/210L", coreq: "EE 301" }, 
+              { code: "EE 302", title: "Electrical Machines 1", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 213, EE 210/210L", coreq: "None" }, 
+              { code: "EE 302L", title: "Electrical Machines 1 - Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 213, EE 210/210L", coreq: "EE 302" }, 
+              { code: "EE 303", title: "Numerical Methods and Analysis", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "EE 208", coreq: "None" }, 
+              { code: "EE 303L", title: "Numerical Methods and Analysis - Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 208", coreq: "EE 303" }, 
+              { code: "EE 304", title: "Logic Circuits and Switching Theory", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "EE 211/211L", coreq: "None" }, 
+              { code: "EE 304L", title: "Logic Circuits and Switching Theory - Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 211/211L", coreq: "EE 304" }, 
+              { code: "EE 306", title: "Industrial Electronics", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 211/211L", coreq: "None" }, 
+              { code: "EE 306L", title: "Industrial Electronics - Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 211/211L", coreq: "EE 306" }, 
+              { code: "EE 307", title: "Fundamentals of Electronic Communications", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 211/211L", coreq: "None" }, 
+              { code: "TOTAL", title: "", lab_units: 5, lab_hours: 15, lec_units: 18, lec_hours: 18, prereq: "", coreq: "" }, 
+            ]
+          },
+          {
+            name: "Second Semester",
+            courses: [
+              { code: "EE 309", title: "Electrical Machines 2", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 302/302L", coreq: "None" },
+              { code: "EE 309L", title: "Electrical Machines 2 Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 302/302L", coreq: "EE 309" },
+              { code: "EE 310", title: "Electrical Apparatus and Devices", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "EE 301/310L", coreq: "None" },
+              { code: "EE 310L", title: "Electrical Apparatus and Devices Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 301/310L", coreq: "EE 310" },
+              { code: "EE 311", title: "Microprocessor Systems", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "EE 304/304L", coreq: "None" },
+              { code: "EE 311L", title: "Microprocessor Systems Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 304/304L", coreq: "EE 311" },
+              { code: "EE 313", title: "Basic Occupational Safety and Health", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 300", coreq: "None" },
+              { code: "EE 314", title: "Feedback Control Systems", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "EE 208, EE 211/211L", coreq: "None" },
+              { code: "EE 314L", title: "Feedback Control Systems Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 208, EE 211/211L", coreq: "EE 314" },
+              { code: "EE 315", title: "Materials Science and Engineering", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "COE 103/103L, EE 209", coreq: "None" },
+              { code: "EE 316", title: "Electrical Equipment Operation and Maintenance", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 301/301L", coreq: "None" },
+              { code: "EE 317", title: "Management of Engineering Projects", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "EE 216", coreq: "None" },
+              { code: "EE 318", title: "Research Methods", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "COE 106", coreq: "EE 309/309L" },
+              { code: "TOTAL", title: "", lab_units: 4, lab_hours: 12, lec_units: 21, lec_hours: 21, prereq: "", coreq: "" },
+            ]
+          }
+        ]
+      },
+
+      {
+        id: "summer", label: "Summer Term",
+        terms: [
+          {
+            name: "Summer Session",
+            courses: [
+              { code: "OJT 400", title: "On the Job Training (OJT)", lab_units: 5, lab_hours: 250, lec_units: 0, lec_hours: 0, prereq: "EE 300, EE 301/301L, EE 302/302L, EE 303/303L, EE 304/304L, EE 306/306L, EE 307, EE 309/309L, EE 310/310L, EE 311/311L, EE 313, EE 314/314L, EE 315, EE 316, EE 317, EE 318", coreq: "None" },
+              { code: "TOTAL", title: "", lab_units: 5, lab_hours: 250, lec_units: 0, lec_hours: 0, prereq: "", coreq: "" },
+            ]
+          }
+        ]
+      }, 
+      
+      {
+        id: "4th-Year", label: "Fourth Year",
+        terms: [
+          {
+            name: "First Semester",
+            courses: [
+              { code: "EE 401", title: "Electrical Standards and Practices", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 313", coreq: "None" },
+              { code: "EE 401L", title: "Electrical Standards and Practices Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 313", coreq: "EE 401" },
+              { code: "EE 403", title: "EE Elective 1 (Renewable Energy)", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 214", coreq: "EE 401/401L" },
+              { code: "EE 404D", title: "Research Methods Design", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 318", coreq: "None" },
+              { code: "EE 405", title: "Instrumentation and Control", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "EE 314/314L", coreq: "None" },
+              { code: "EE 405L", title: "Instrumentation and Control Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 314/314L", coreq: "EE 405" },
+              { code: "EE 406", title: "Technopreneurship", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 317", coreq: "EE 404D" },
+              { code: "EE 407", title: "MATH Correlation", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 309/309L, EE 310/310L, EE 311/311L, EE 313, EE 314/314L", coreq: "None" },
+              { code: "EE 408", title: "ESAS Correlation", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 309/309L, EE 310/310L, EE 311/311L, EE 313, EE 314/314L, EE 315, EE 316, EE 317, EE 318", coreq: "None" },
+              { code: "EE_409", title: "Power Systems Analysis", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE_303/303L", coreq: "EE_401/401L" },
+              { code: "EE_409L", title: "Power Systems Analysis Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE_303/303L", coreq: "EE_401/401L, EE_409" },
+              { code: "TOTAL", title: "", lab_units: 6, lab_hours: 18, lec_units: 14, lec_hours: 14, prereq: "None", coreq: "None" },
+            ]
+          },
+          {
+            name: "Second Semester",
+            courses: [
+              { code: "EE 410", title: "Electrical Systems and Illumination Engineering Design", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 309/309L, EE 401/401L", coreq: "None" },
+              { code: "EE 410D", title: "Electrical Systems and Illumination Engineering Design Lab", lab_units: 2, lab_hours: 6, lec_units: 0, lec_hours: 0, prereq: "EE 309/309L, EE 401/401L", coreq: "EE 410" },
+              { code: "EE 411", title: "EE Elective 2 (Power System Protection)", lab_units: 0, lab_hours: 0, lec_units: 3, lec_hours: 3, prereq: "EE 403", coreq: "None" },
+              { code: "EE 412D", title: "Research Project or Capstone Design Project", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 404D", coreq: "None" },
+              { code: "EE 413F", title: "Fieldtrip and Seminars", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "None", coreq: "EE 412D" },
+              { code: "EE 414D", title: "Fundamentals of Power Plant Engineering", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 403, EE 409/409L", coreq: "None" },
+              { code: "EE 415", title: "Distribution System and Substation Design", lab_units: 0, lab_hours: 0, lec_units: 2, lec_hours: 2, prereq: "EE 409/409L", coreq: "EE 414/414D" },
+              { code: "EE 415D", title: "Distribution System and Substation Design Lab", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 409/409L", coreq: "EE 414/414D, EE 415" },
+              { code: "EE 417", title: "EEPS Correlation", lab_units: 1, lab_hours: 3, lec_units: 0, lec_hours: 0, prereq: "EE 407, EE 408", coreq: "None" },
+              { code: "TOTAL", title: "", lab_units: 7, lab_hours: 21, lec_units: 8, lec_hours: 8, prereq: "None", coreq: "None" }
+            ]
+          }
+        ]
+      },
+    ],
     bullets: [
       {
         title: "Pre‑Engineering Formation (Early Curriculum Stages)",
@@ -118,11 +299,11 @@ export const EE = {
       },
       {
         title: "Core Electrical Engineering Scaffold (Intermediate Stages)",
-        text: "Following the foundational courses, students advance into core electrical engineering subjects, which define the discipline’s analytical and technical structure: \n\n •\tCircuits & Electronics – development of analytical and design skills for linear circuits and electronic devices, supported by laboratory measurement and data interpretation activities.\n •\tSignals, Controls, and Instrumentation – introduction to signal behavior, feedback systems, and measurement frameworks essential to automation and monitoring applications. \n •\tElectromagnetics & Energy Conversion – principles of electric and magnetic fields, electrical machines, and conversion processes forming the basis for power and systems engineering.  The OBE framework requires that teaching strategies and assessments in these courses directly map to student outcomes (problem‑solving, experimentation, communication, design under constraints, etc.) and are monitored for CQI."
+        text: "Following the foundational courses, students advance into core electrical engineering subjects, which define the discipline’s analytical and technical structure: \n\n <b>•\tCircuits & Electronics</b> – development of analytical and design skills for linear circuits and electronic devices, supported by laboratory measurement and data interpretation activities.\n\n<b>•\tSignals, Controls, and Instrumentation</b> – introduction to signal behavior, feedback systems, and measurement frameworks essential to automation and monitoring applications. \n\n<b>•\tElectromagnetics & Energy Conversion</b> – principles of electric and magnetic fields, electrical machines, and conversion processes forming the basis for power and systems engineering.  The OBE framework requires that teaching strategies and assessments in these courses directly map to student outcomes (problem‑solving, experimentation, communication, design under constraints, etc.) and are monitored for CQI."
       },
       {
         title: "Professional Tracks and Application Domains (Advanced Stages)",
-        text: "At advanced levels, students engage in applied and domain‑specific learning consistent with publicly published descriptions of BulSU’s BSEE areas: \n\n\n •\tPower Systems Engineering – study of generation, transmission, distribution, system protection, and grid operations. \n•\tRenewable Energy & Sustainable Technologies – topics related to emerging energy systems and efficiency, aligned with evolving national industry needs.\n •\tControl Systems & Instrumentation – automation, sensors, and process control for industrial applications.   Laboratories, design activities, and project‑based learning strengthen students’ ability to work in teams, communicate effectively, apply modern engineering tools, and make ethical and contextual engineering decisions—all outcomes required under the College’s OBE structure."
+        text: "At advanced levels, students engage in applied and domain‑specific learning consistent with publicly published descriptions of BulSU’s BSEE areas: \n\n <b>•\tPower Systems Engineering</b> – study of generation, transmission, distribution, system protection, and grid operations. \n\n<b>•\tRenewable Energy & Sustainable Technologies</b> – topics related to emerging energy systems and efficiency, aligned with evolving national industry needs.\n\n<b>•\tControl Systems & Instrumentation</b> – automation, sensors, and process control for industrial applications. Laboratories, design activities, and project‑based learning strengthen students’ ability to work in teams, communicate effectively, apply modern engineering tools, and make ethical and contextual engineering decisions—all outcomes required under the College’s OBE structure."
       },
       {
         title: "Integrative Experiences, Industry Linkages, and Continuous Improvement",

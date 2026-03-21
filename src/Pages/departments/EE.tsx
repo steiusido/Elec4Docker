@@ -16,6 +16,10 @@ export default function EEPage() {
     [baseDept]
   );
 
+  const [selectedYearId, setSelectedYearId] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const bullets = baseDept.curriculum.bullets || [];
+  
   useEffect(() => {
     if (!dept) return;
 
@@ -33,6 +37,18 @@ export default function EEPage() {
   const onNav = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const currentYearData = useMemo(() => {
+    return baseDept.curriculum.years.find((y) => y.id === selectedYearId) || null;
+  }, [selectedYearId, baseDept]);
+  
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1 === bullets.length ? 0 : prev + 1));
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev === 0 ? bullets.length - 1 : prev - 1));
   };
 
   return (
@@ -177,46 +193,160 @@ export default function EEPage() {
         </div>
       </section>
 
-      <section id="curriculum" className="max-w-6xl mx-auto px-6 pt-16">
-        <div className="grid grid-cols-12 gap-8 items-start">
-          <div className="col-span-12 md:col-span-6">
-            <div className="text-xs font-semibold text-gray-400 tracking-wide">TAKE A TOUR</div>
-            <h2 className="mt-2 text-3xl font-extrabold text-gray-900">{dept.curriculum.title}</h2>
-            <p className="mt-3 text-sm text-gray-500 leading-relaxed">{dept.curriculum.text}</p>
+      <section id="curriculum" className="max-w-7xl mx-auto px-6 pt-16">
+        <div className="text-center mb-10">
+          <h2 className="text-4xl font-black text-gray-900 uppercase">Curriculum Overview</h2>
+        </div>
 
-            <ul className="mt-6 space-y-4 text-sm text-gray-600">
-              {dept.curriculum.bullets.map((b, idx) => (
-                <li key={idx} className="flex flex-col text-justify">
+        {/* BULLET CARDS SECTION */}
+        <div className="relative mb-16 group px-4 max-w-6xl mx-auto">
+          <div className="overflow-hidden rounded-[2rem]">
+            <div 
+              className="flex transition-transform duration-600 ease-[cubic-bezier(0.45,0,0.55,1)]"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            >
+              {bullets.map((bullet, index) => (
+                <div key={index} className="w-full md:w-1/2 flex-shrink-0 px-3">
+                  <div className="p-7 rounded-[2rem] bg-red-50/40 border border-red-100 shadow-sm hover:shadow-md transition-all duration-300 h-64 flex flex-col">
+                    
+                    <div className="flex items-center gap-2 mb-4 flex-shrink-0">
+                      <h3 className="text-red-900 font-black uppercase text-[13px] tracking-[0.18em] whitespace-normal leading-tight mb-1 text-center">
+                        {bullet.title}
+                      </h3>
+                    </div>
 
-                  {/* Bullet + Title */}
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="w-2 h-2 rounded-full bg-yellow-500 inline-block flex-shrink-0"
-
-                    />
-                    <p className="font-semibold text-red-900">
-                      {typeof b === "string" ? b : b.title}
-                    </p>
+                    <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                      <div 
+                        className="text-gray-600 text-[12px] leading-relaxed whitespace-pre-line 
+                                  [&_b]:text-red-900/80 [&_b]:font-black" 
+                        dangerouslySetInnerHTML={{ __html: bullet.text }} 
+                      />
+                    </div>
                   </div>
-
-                  {/* Description */}
-                  {typeof b !== "string" && (
-                    <p className="mt-3 ml-4 text-gray-600 whitespace-pre-line" >
-                      {b.text}
-                    </p>
-                  )}
-
-                </li>
+                </div>
               ))}
-            </ul>
-          </div>
-
-          <div className="col-span-12 md:col-span-6">
-            <div className="h-[360px] md:h-[500px] rounded-2xl flex items-center justify-center overflow-hidden">
-              <img src={dept.images.watermark} alt="" className="w-[420px] md:w-[520px] opacity-20 select-none" />
             </div>
           </div>
+
+          <button 
+            onClick={() => setCurrentIndex(prev => prev === 0 ? Math.ceil(bullets.length / 2) - 1 : prev - 1)}
+            className="absolute -left-2 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md shadow-xl border border-gray-100 p-4 rounded-full text-red-900 hover:bg-red-900 hover:text-white transition-all z-10 opacity-0 group-hover:opacity-100"
+          >
+            <span className="block transform rotate-180 text-xs font-bold">➜</span>
+          </button>
+          
+          <button 
+            onClick={() => setCurrentIndex(prev => (prev + 1) % Math.ceil(bullets.length / 2))}
+            className="absolute -right-2 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md shadow-xl border border-gray-100 p-4 rounded-full text-red-900 hover:bg-red-900 hover:text-white transition-all z-10 opacity-0 group-hover:opacity-100"
+          >
+            <span className="text-xs font-bold">➜</span>
+          </button>
+
+          <div className="flex justify-center gap-2 mt-8">
+            {Array.from({ length: Math.ceil(bullets.length / 2) }).map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                className={`h-1 rounded-full transition-all duration-300 ${
+                  currentIndex === idx ? "w-10 bg-red-900" : "w-2 bg-gray-200"
+                }`}
+              />
+            ))}
+          </div>
         </div>
+
+        {/* CARDS GRID */}
+        <p className="text-gray-500 mt-4 italic font-medium text-center">
+          Click on a year level to view the specific courses for each semester.
+        </p>
+        {}
+        <div className="h-8" />
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
+            {baseDept.curriculum.years.map((year) => (
+              <button
+                key={year.id}
+                onClick={() => setSelectedYearId(selectedYearId === year.id ? null : year.id)}
+                className={`p-6 rounded-2xl border-2 transition-all duration-300 text-left relative ${
+                  selectedYearId === year.id
+                    ? "border-red-900 bg-red-50 shadow-md scale-105"
+                    : "border-gray-100 bg-red-50/40 hover:border-red-200 shadow-sm"
+                }`}
+              >
+                {selectedYearId === year.id && (
+                  <span className="absolute top-3 right-4 text-red-900 font-bold text-[10px]">✕</span>
+                )}
+                
+                <span className="block text-[10px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
+                  Curriculum
+                </span>
+                <span className={`block text-sm font-extrabold leading-tight ${
+                  selectedYearId === year.id ? "text-red-900" : "text-gray-800"
+                }`}>
+                  {year.label}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* DYNAMIC TABLE DISPLAY */}
+          {selectedYearId && (
+            <div className="bg-gray-50 rounded-[2.5rem] p-8 border border-gray-100 animate-fadeIn">
+              {currentYearData?.terms.map((term, tIdx) => (
+                <div key={tIdx} className={tIdx > 0 ? "mt-16" : ""}>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="h-6 w-1 bg-red-900 rounded-full"></div>
+                    <h3 className="text-lg font-bold text-gray-900 uppercase tracking-tight">
+                      {term.name}
+                    </h3>
+                  </div>
+                
+                <div className="overflow-x-auto bg-white rounded-2xl shadow-sm border border-gray-100">
+                  <table className="w-full text-left border-collapse table-fixed">
+                    <thead>
+                      <tr className="bg-red-900 text-[10px] uppercase text-white border-b border-gray-100">
+                        <th className="py-4 px-6 font-bold w-28">Code</th>
+                        <th className="py-4 px-6 font-bold w-auto">Course Title</th>
+                        <th className="py-4 px-2 text-center font-bold w-20">Lab Units</th>
+                        <th className="py-4 px-2 text-center font-bold w-20">Lab Hrs</th>
+                        <th className="py-4 px-2 text-center font-bold w-20">Lec Units</th>
+                        <th className="py-4 px-2 text-center font-bold w-20">Lec Hrs</th>
+                        <th className="py-4 px-6 font-bold w-44 text-center">Prerequisite/s</th>
+                        <th className="py-4 px-6 font-bold w-44 text-center">Co-requisite/s</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-[12px] divide-y divide-gray-50">
+                      {term.courses?.map((course, cIdx) => (
+                        <tr 
+                          key={cIdx} 
+                          className={`transition-colors duration-150 ${
+                            course.code === 'TOTAL' 
+                              ? 'bg-red-900 text-white font-black' 
+                              : 'hover:bg-red-50/70 cursor-default' 
+                          }`}
+                        >
+                          <td className={`py-4 px-6 font-mono font-bold ${course.code === 'TOTAL' ? 'text-white' : 'text-red-900'}`}>
+                            {course.code}
+                          </td>
+                          <td className="py-4 px-6 font-medium">{course.title}</td>
+                          <td className="py-4 px-2 text-center">{course.lab_units}</td>
+                          <td className="py-4 px-2 text-center">{course.lab_hours || 0}</td>
+                          <td className="py-4 px-2 text-center">{course.lec_units}</td>
+                          <td className="py-4 px-2 text-center">{course.lec_hours || 0}</td>
+                          <td className="py-4 px-6 text-[10px] whitespace-normal leading-relaxed text-center">
+                            {course.prereq || "None"}
+                          </td>
+                          <td className="py-4 px-6 text-[10px] whitespace-normal leading-relaxed text-center">
+                            {course.coreq || "None"}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       <section id="laboratories" className="max-w-6xl mx-auto px-6 pt-16">
