@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../../components/navbar";
+// 1. Updated Import
+import CPEnavbar from "../../components/CPEnavbar"; 
 import SectionTitle from "../../components/SectionTitle";
 import Footer from "../../components/Footer";
 import { mergeDeptWithOverrides } from "../../lib/departmentAdmin";
 import { CPE } from "../../data/department/CPE";
+import type { NavId } from "../../types/nav"; // Import your type for safety
 import "../../styles/departments/CPE.css";
 
 export default function CPEPage() {
@@ -29,15 +31,21 @@ export default function CPEPage() {
     }
   }, [dept]);
 
-  const onNav = (id: string) => {
+  // 2. The Scrolling Logic
+  // This matches the "id" from the buttons in CPEnavbar to the "id" on your <section> tags
+  const onNav = (id: NavId | string) => {
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   return (
     <div className="bg-white">
-      <Navbar onNav={onNav} />
+      {/* 3. Using the new Component */}
+      <CPEnavbar onNav={onNav} />
 
+      {/* --- HOME SECTION --- */}
       <section id="home" className="max-w-6xl mx-auto px-6 pt-10">
         <div className="text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-wide text-gray-900">
@@ -83,6 +91,7 @@ export default function CPEPage() {
         </div>
       </section>
 
+      {/* --- ABOUT SECTION --- */}
       <section id="about" className="max-w-6xl mx-auto px-6 pt-10">
         <div className="text-left">
           <div className="text-sm font-semibold text-gray-900">{dept.programOverview.heading}</div>
@@ -96,6 +105,7 @@ export default function CPEPage() {
         </div>
       </section>
 
+      {/* --- PEO SECTION --- */}
       <section id="peo" className="max-w-6xl mx-auto px-6 pt-16">
         <SectionTitle center eyebrow={dept.title} title={dept.peo.title} subtitle={dept.peo.subtitle} />
 
@@ -116,6 +126,7 @@ export default function CPEPage() {
         </div>
       </section>
 
+      {/* --- SO SECTION --- */}
       <section id="so" className="max-w-6xl mx-auto px-6 pt-16">
         <SectionTitle center eyebrow={dept.title} title={dept.so.title} subtitle={dept.so.subtitle} />
 
@@ -126,6 +137,7 @@ export default function CPEPage() {
         </div>
       </section>
 
+      {/* --- CURRICULUM SECTION --- */}
       <section id="curriculum" className="max-w-6xl mx-auto px-6 pt-16">
         <div className="grid grid-cols-12 gap-8 items-start">
           <div className="col-span-12 md:col-span-6">
@@ -151,6 +163,7 @@ export default function CPEPage() {
         </div>
       </section>
 
+      {/* --- LABORATORIES SECTION --- */}
       <section id="laboratories" className="max-w-6xl mx-auto px-6 pt-16">
         <SectionTitle center eyebrow={dept.title} title={dept.laboratories.title} subtitle="Department laboratories and learning spaces" />
 
@@ -164,6 +177,7 @@ export default function CPEPage() {
         </div>
       </section>
 
+      {/* --- FACULTY SECTION --- */}
       <section id="faculty" className="max-w-6xl mx-auto px-6 pt-16">
         <SectionTitle center eyebrow={dept.title} title={dept.faculty.title} />
 
@@ -177,6 +191,7 @@ export default function CPEPage() {
         </div>
       </section>
 
+      {/* --- CAREERS SECTION --- */}
       <section id="careers" className="max-w-6xl mx-auto px-6 pt-16">
         <SectionTitle center eyebrow={dept.title} title={dept.careers.title} subtitle={dept.careers.subtitle} />
 
@@ -191,6 +206,7 @@ export default function CPEPage() {
         </div>
       </section>
 
+      {/* --- CONTACT SECTION --- */}
       <section id="contact" className="max-w-6xl mx-auto px-6 pt-16">
         <div className="rounded-2xl border bg-gray-50 p-6 md:p-8">
           <h2 className="text-xl font-bold text-gray-900">Department Contact</h2>
@@ -203,20 +219,11 @@ export default function CPEPage() {
   );
 }
 
-function Stat({
-  value,
-  label,
-  accentHex,
-}: {
-  value: number;
-  label: string;
-  accentHex: string;
-}) {
+// Sub-components (Stat, Bullet, OutcomeCard) stay the same as your original file
+function Stat({ value, label, accentHex }: { value: number; label: string; accentHex: string }) {
   return (
     <div>
-      <div className="text-3xl font-extrabold" style={{ color: accentHex }}>
-        {value}
-      </div>
+      <div className="text-3xl font-extrabold" style={{ color: accentHex }}>{value}</div>
       <div className="mt-1 text-xs font-semibold text-gray-500">{label}</div>
     </div>
   );
@@ -234,7 +241,7 @@ function Bullet({ title, text }: { title: string; text: string }) {
 function OutcomeCard({ title, text }: { title: string; text: string }) {
   return (
     <div className="rounded-2xl border bg-white p-6 text-center">
-      <div className="mx-auto w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center">OK</div>
+      <div className="mx-auto w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center font-bold text-[#A90000]">✓</div>
       <div className="mt-4 font-semibold text-gray-900">{title}</div>
       <div className="mt-2 text-sm text-gray-500">{text}</div>
     </div>
