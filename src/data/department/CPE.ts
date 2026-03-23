@@ -35,8 +35,14 @@ export const CPE = {
 
   programOverview: {
     heading: "Program Overview",
-    text: "EDIT ME: Computer Engineering program overview.",
-    stats: { nonTeaching: 111, faculty: 22, students: 333 },
+    text: "The Bachelor of Science in Computer Engineering program at Bulacan State University integrates computer science and electronics engineering to prepare students in designing and developing computer-based systems. It focuses on both hardware and software, covering areas such as embedded systems, programming, and computer architecture. Graduates are equipped to solve real-world engineering problems and pursue careers in IT, telecommunications, and electronics industries.",
+    stats: [
+      { value: "92%", label: "Passing Rate", highlight: true },
+      { value: "40+", label: "Industry Partners", highlight: false },
+      { value: "10", label: "Specialized Labs", highlight: false },
+    ],
+    mission: "EDIT ME",
+    vision: "ESIT ME",
   },
 
   peo: {
