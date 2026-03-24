@@ -60,7 +60,7 @@ export default function EEPage() {
               
               <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black italic tracking-tighter leading-[0.9] lg:leading-[0.85] uppercase">
                 <span className="block text-black">Electrical</span>
-                <span className="inline-block bg-gradient-to-r from-red-700 to-orange-500 bg-clip-text text-transparent lg:pr-8 lg:-mr-8">
+                <span className="inline-block bg-linear-to-r from-red-700 to-orange-500 bg-clip-text text-transparent lg:pr-8 lg:-mr-8">
                   Engineering
                 </span>
               </h1>
@@ -132,10 +132,10 @@ export default function EEPage() {
 
         <div className="relative z-10">
           <div className="text-left mb-12">
-            <div className="text-2xl md:text-3xl lg:text-4xl font-black uppercase italic bg-gradient-to-r from-red-800 via-red-600 to-orange-500 bg-clip-text text-transparent leading-tight">
+            <div className="text-2xl md:text-3xl lg:text-4xl font-black uppercase italic bg-linear-to-r from-red-800 via-red-600 to-orange-500 bg-clip-text text-transparent leading-tight">
               {dept.programOverview.subtitle}
             </div>
-            <div className="mt-3 w-16 h-1 bg-gradient-to-r from-red-800 to-orange-500 rounded-full" />
+            <div className="mt-3 w-16 h-1 bg-linear-to-r from-red-800 to-orange-500 rounded-full" />
           </div>
 
           <div className="space-y-12 w-full"> 
@@ -162,7 +162,7 @@ export default function EEPage() {
             ].map((stat, i) => (
               <div key={i} className="group relative bg-white p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border border-gray-200 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_20px_2px_rgba(169,0,0,0.3)] flex flex-col items-center text-center">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-1 bg-red-900 rounded-b-full transition-all duration-500 group-hover:w-80 group-hover:rounded-none" />
-                <span className="text-3xl md:text-4xl lg:text-5xl font-black bg-gradient-to-r from-red-900 via-red-800 to-orange-700 bg-clip-text text-transparent leading-tight mb-2 transition-transform duration-500 group-hover:scale-110">
+                <span className="text-3xl md:text-4xl lg:text-5xl font-black bg-linear-to-r from-red-900 via-red-800 to-orange-700 bg-clip-text text-transparent leading-tight mb-2 transition-transform duration-500 group-hover:scale-110">
                   {stat.val}
                 </span>
                 <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 group-hover:text-gray-900 transition-colors">
@@ -175,7 +175,17 @@ export default function EEPage() {
       </section>
 
       <section id="peo" className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-        <SectionTitle center eyebrow={dept.title} title={dept.peo.title} subtitle={dept.peo.subtitle} />
+        <div className="mb-8 md:mb-12
+          [&_div.text-xs]:text-gray-500 [&_div.text-xs]:tracking-[0.6em] [&_div.text-xs]:text-[14px] [&_div.text-xs]:md:text-[15px] [&_div.text-xs]:font-bold [&_div.text-xs]:mb-4
+          [&_h2]:mt-2 [&_h2]:text-3xl [&_h2]:md:text-4xl [&_h2]:font-black [&_h2]:uppercase [&_h2]:italic [&_h2]:bg-linear-to-r [&_h2]:from-red-800 [&_h2]:via-red-700 [&_h2]:to-orange-600 [&_h2]:bg-clip-text [&_h2]:text-transparent [&_h2]:leading-tight [&_h2]:pr-4 [&_h2]:-mr-4
+          [&_p]:text-gray-500 [&_p]:text-sm [&_p]:md:text-base [&_p]:tracking-wide [&_p]:mt-4 [&_p]:max-w-2xl [&_p]:mx-auto">
+          <SectionTitle 
+            center 
+            eyebrow={dept.title} 
+            title={dept.peo.title}
+            subtitle={dept.peo.subtitle}
+          />
+        </div>
 
         <div className="mt-8 md:mt-12 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
         
@@ -217,7 +227,15 @@ export default function EEPage() {
     </section>
 
       <section id="so" className="max-w-6xl mx-auto px-6 pt-16">
-        <SectionTitle center eyebrow={dept.title} title={dept.so.title} subtitle={dept.so.subtitle} />
+        <div className="mb-6 md:mb-7 
+          [&_div.text-xs]:text-gray-500 [&_div.text-xs]:tracking-[0.6em] [&_div.text-xs]:text-[14px] [&_div.text-xs]:md:text-[15px] [&_div.text-xs]:font-bold [&_div.text-xs]:mb-4
+          [&_h2]:mt-2 [&_h2]:text-3xl [&_h2]:md:text-4xl [&_h2]:font-black [&_h2]:uppercase [&_h2]:italic [&_h2]:bg-linear-to-r [&_h2]:from-red-800 [&_h2]:via-red-700 [&_h2]:to-orange-600 [&_h2]:bg-clip-text [&_h2]:text-transparent [&_h2]:leading-tight [&_h2]:pr-4 [&_h2]:-mr-4">
+          <SectionTitle 
+            center 
+            eyebrow={dept.title} 
+            title={dept.so.title} 
+          />
+        </div>
 
         <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
           {dept.so.outcomes.map((o, idx) => {
@@ -236,33 +254,26 @@ export default function EEPage() {
       </section>
 
       <section id="curriculum" className="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-        <div className="text-center mb-10">
-          <div className="text-xs font-semibold text-gray-400 tracking-wide uppercase">ELECTRICAL ENGINEERING</div>
-          <h2 className="mt-2 text-3xl font-extrabold text-gray-900">{dept.curriculum.title}</h2>
+        <div className="mb-6 md:mb-12 
+          [&_div.text-xs]:text-gray-500 [&_div.text-xs]:tracking-[0.6em] [&_div.text-xs]:text-[14px] [&_div.text-xs]:md:text-[15px] [&_div.text-xs]:font-bold [&_div.text-xs]:mb-4
+          [&_h2]:mt-2 [&_h2]:text-3xl [&_h2]:md:text-4xl [&_h2]:font-black [&_h2]:uppercase [&_h2]:italic [&_h2]:bg-linear-to-r [&_h2]:from-red-800 [&_h2]:via-red-700 [&_h2]:to-orange-600 [&_h2]:bg-clip-text [&_h2]:text-transparent [&_h2]:leading-tight [&_h2]:pr-4 [&_h2]:-mr-4">
+          <SectionTitle 
+            center 
+            eyebrow={dept.title} 
+            title={dept.curriculum.title} 
+          />
         </div>
 
         <div className="relative mb-12 group px-0 md:px-4 max-w-6xl mx-auto">
           <div className="overflow-hidden rounded-[1.5rem] md:rounded-[2rem]">
             <div 
               className="flex transition-transform duration-600 ease-[cubic-bezier(0.45,0,0.55,1)]"
-              style={{ 
-                transform: `translateX(-${currentIndex * 100}%)` 
-              }}
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
               {bullets.map((bullet, index) => (
                 <div key={index} className="w-full md:w-1/2 shrink-0 px-2 md:px-3 py-4">
                   <div className="group/bullet p-6 md:p-7 rounded-[1.5rem] md:rounded-[2rem] bg-gray-50 border border-gray-100 transition-all duration-500 h-80 md:h-64 flex flex-col hover:bg-red-50 hover:border-red-200 shadow-sm hover:-translate-y-1 hover:scale-[1.02]">
-                    <div className="flex items-center justify-center gap-2 mb-4 shrink-0">
-                      <h3 className="text-red-900 font-black uppercase text-[12px] md:text-[13px] tracking-[0.18em] leading-tight text-center transition-colors duration-300 group-hover/bullet:text-red-600">
-                        {bullet.title}
-                      </h3>
-                    </div>
-                    <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-                      <div 
-                        className="text-gray-600 text-[11px] md:text-[12px] leading-relaxed whitespace-pre-line group-hover/bullet:text-gray-900 text-justify [hyphens:auto] transition-colors duration-300" 
-                        dangerouslySetInnerHTML={{ __html: bullet.text }} 
-                      />
-                    </div>
+                    <Bullet title={bullet.title} text={bullet.text} />
                   </div>
                 </div>
               ))}
@@ -307,10 +318,10 @@ export default function EEPage() {
         </div>
 
         <div className="text-center space-y-2 mb-10">
-          <p className="text-gray-500 italic font-medium text-sm">
+          <p className="text-gray-500 tracking-[0.2em] text-[14px] md:text-[15px] font-bold mb-4">
             Click on a year level to view the specific courses.
           </p>
-          <p className="text-gray-400 text-[10px] md:text-xs leading-relaxed uppercase tracking-wider">
+          <p className="text-gray-400 text-[13px] md:text-[14px] mb-4 uppercase tracking-wider">
             Bachelor of Science in Electrical Engineering  <br /> • Revised 2024   <br /> • CMO 88 Series of 2017 <br className="md:hidden" />
           </p>
         </div>
@@ -320,21 +331,18 @@ export default function EEPage() {
             <button
               key={year.id}
               onClick={() => setSelectedYearId(selectedYearId === year.id ? null : year.id)}
-              /* Scale is now applied if hovered OR if it's the selected year */
               className={`p-4 md:p-6 rounded-2xl border-2 transition-all duration-300 text-left relative ${
                 selectedYearId === year.id
-                  ? "border-red-900 bg-red-50 shadow-lg scale-105 z-10" 
-                  : "border-gray-100 bg-white hover:border-red-200 hover:scale-105 shadow-sm"
+                  ? "border-red-900 bg-red-50 shadow-sm scale-105 z-10" 
+                  : "border-gray-100 bg-white hover:border-orange-500 hover:scale-105 shadow-sm"
               }`}
             >
               {selectedYearId === year.id && (
                 <span className="absolute top-2 right-3 text-red-900 font-bold text-[10px]">✕</span>
               )}
-              
               <span className="block text-[9px] font-bold text-gray-400 uppercase mb-1 tracking-widest">
                 CURRICULUM
               </span>
-              
               <span className={`block text-xs md:text-sm font-extrabold leading-tight ${
                 selectedYearId === year.id ? "text-red-900" : "text-gray-800"
               }`}>
@@ -392,11 +400,9 @@ export default function EEPage() {
                           <td className="py-4 px-2 text-center">{course.lab_hours || 0}</td>
                           <td className="py-4 px-2 text-center">{course.lec_units}</td>
                           <td className="py-4 px-2 text-center">{course.lec_hours || 0}</td>
-                          
                           <td className="py-4 px-4 text-[10px] text-center">
                             {course.code === 'TOTAL' ? "" : (course.prereq || "—")}
                           </td>
-                          
                           <td className="py-4 px-4 text-[10px] text-center">
                             {course.code === 'TOTAL' ? "" : (course.coreq || "—")}
                           </td>
@@ -412,7 +418,15 @@ export default function EEPage() {
       </section>
 
       <section id="laboratories" className="max-w-6xl mx-auto px-4 sm:px-6 pt-16 md:pt-24 pb-16">
-        <SectionTitle center eyebrow={dept.title} title={dept.laboratories.title} subtitle="State-of-the-art facilities for hands-on engineering education" />
+        <div className="mb-6 md:mb-7 
+          [&_div.text-xs]:text-gray-500 [&_div.text-xs]:tracking-[0.6em] [&_div.text-xs]:text-[14px] [&_div.text-xs]:md:text-[15px] [&_div.text-xs]:font-bold [&_div.text-xs]:mb-4
+          [&_h2]:mt-2 [&_h2]:text-3xl [&_h2]:md:text-4xl [&_h2]:font-black [&_h2]:uppercase [&_h2]:italic [&_h2]:bg-linear-to-r [&_h2]:from-red-800 [&_h2]:via-red-700 [&_h2]:to-orange-600 [&_h2]:bg-clip-text [&_h2]:text-transparent [&_h2]:leading-tight [&_h2]:pr-4 [&_h2]:-mr-4">
+          <SectionTitle 
+            center 
+            eyebrow={dept.title} 
+            title={dept.laboratories.title} 
+          />
+        </div>
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
           {dept.laboratories.items.map((lab, idx) => (
             <div 
@@ -449,8 +463,15 @@ export default function EEPage() {
       </section>
 
       <section id="faculty" className="max-w-6xl mx-auto px-4 sm:px-6 pt-16 overflow-hidden">
-        <SectionTitle center eyebrow={dept.title} title={dept.faculty.title} />
-        
+        <div className="mb-6 md:mb-7 
+          [&_div.text-xs]:text-gray-500 [&_div.text-xs]:tracking-[0.6em] [&_div.text-xs]:text-[14px] [&_div.text-xs]:md:text-[15px] [&_div.text-xs]:font-bold [&_div.text-xs]:mb-4
+          [&_h2]:mt-2 [&_h2]:text-3xl [&_h2]:md:text-4xl [&_h2]:font-black [&_h2]:uppercase [&_h2]:italic [&_h2]:bg-linear-to-r [&_h2]:from-red-800 [&_h2]:via-red-700 [&_h2]:to-orange-600 [&_h2]:bg-clip-text [&_h2]:text-transparent [&_h2]:leading-tight [&_h2]:pr-4 [&_h2]:-mr-4">
+          <SectionTitle 
+            center 
+            eyebrow={dept.title} 
+            title={dept.faculty.title} 
+          />
+        </div>
         <div className="relative mt-12 group h-105 md:h-112.5 max-w-4xl mx-auto">
           <button
             onClick={() => setActiveIdx((prev) => (prev > 0 ? prev - 1 : members.length - 1))}
@@ -541,12 +562,20 @@ export default function EEPage() {
       </section>
 
       <section id="careers" className="max-w-6xl mx-auto px-6 pt-16">
-        <SectionTitle center eyebrow={dept.title} title={dept.careers.title} subtitle={dept.careers.subtitle} />
+        <div className="mb-6 md:mb-7 
+          [&_div.text-xs]:text-gray-500 [&_div.text-xs]:tracking-[0.6em] [&_div.text-xs]:text-[14px] [&_div.text-xs]:md:text-[15px] [&_div.text-xs]:font-bold [&_div.text-xs]:mb-4
+          [&_h2]:mt-2 [&_h2]:text-3xl [&_h2]:md:text-4xl [&_h2]:font-black [&_h2]:uppercase [&_h2]:italic [&_h2]:bg-linear-to-r [&_h2]:from-red-800 [&_h2]:via-red-700 [&_h2]:to-orange-600 [&_h2]:bg-clip-text [&_h2]:text-transparent [&_h2]:leading-tight [&_h2]:pr-4 [&_h2]:-mr-4">
+          <SectionTitle 
+            center 
+            eyebrow={dept.title} 
+            title={dept.careers.title} 
+          />
+        </div>
 
         <div id="careers" className="mt-8 grid grid-cols-1  gap-5">
           {dept.careers.categories.map((cat, idx) => (
             <div key={idx} className="rounded-2xl  bg-white p-6 text-center ">
-              <h3 className="font-bold text-gray-900">{cat.title}</h3>
+              <h3 className="text-gray-900 tracking-[0.2em] text-[14px] md:text-[15px] font-bold mb-4">{cat.title}</h3>
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
                 {cat.cards.map((card, cardIdx) => {
                   const isLast = cardIdx === cat.cards.length - 1;
@@ -579,7 +608,7 @@ export default function EEPage() {
               </div>
               
               <div className="space-y-1">
-                <h2 className="text-red-900 font-black text-lg md:text-xl tracking-tight leading-tight uppercase">
+                <h2 className="text-red-900 font-black text-xl md:text-2xl tracking-tight leading-tight uppercase">
                   College of Engineering
                 </h2>
                 <p className="text-gray-800 font-bold text-md md:text-lg">
@@ -598,12 +627,12 @@ export default function EEPage() {
               <span className="inline-block text-[12px] md:text-[14px] font-black text-gray-700 uppercase tracking-[0.2em] mb-4 bg-white/80 border border-red-100 px-4 py-1.5 rounded-full shadow-sm">
                 Department Head
               </span>
-              <h3 className="text-xl md:text-2xl font-black text-red-900 leading-tight mb-2">
+              <h3 className="mt-2 text-xl md:text-2xl font-black uppercase italic bg-linear-to-r from-red-800 via-red-700 to-orange-800 bg-clip-text text-transparent leading-tight pr-4 -mr-4">
                 Engr. Eleazer C. Nabong
               </h3>
               <a 
                 href="mailto:eleazar.nabong@ms.bulsu.edu.ph" 
-                className="text-gray-600 font-semibold text-sm md:text-base hover:text-red-800 transition-colors flex items-center gap-2 group break-all"
+                className="text-gray-600 font-semibold text-xl md:text-base hover:text-red-800 transition-colors flex items-center gap-2 group break-all"
               >
                 <span className="border-b border-transparent group-hover:border-red-800">
                   eleazar.nabong@ms.bulsu.edu.ph
@@ -616,8 +645,48 @@ export default function EEPage() {
         </div>
       </section>
 
+      <button 
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-8 right-8 z-50 group flex flex-col items-center gap-1 transition-all hover:-translate-y-2 active:scale-95"
+        aria-label="Back to top"
+      >
+        <div className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-white border border-red-100 shadow-xl text-red-600 group-hover:bg-red-700 group-hover:text-white group-hover:shadow-red-500/40 transition-all duration-300">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-6 w-6 md:h-7 md:w-7" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 15l7-7 7 7" />
+          </svg>
+        </div>
+        
+        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-hover:text-red-800 transition-colors drop-shadow-sm">
+          Top
+        </span>
+      </button>
+
       <Footer />
     </div>
+  );
+}
+
+function Bullet({ title, text }: { title: string; text: string }) {
+  return (
+    <>
+      <div className="flex items-center justify-center gap-2 mb-4 shrink-0">
+        <h3 className="text-red-900 font-black uppercase text-[12px] md:text-[13px] tracking-[0.18em] leading-tight text-center transition-colors duration-300 group-hover/bullet:text-red-600">
+          {title}
+        </h3>
+      </div>
+      <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+        <div 
+          className="text-gray-600 text-[11px] md:text-[12px] leading-relaxed whitespace-pre-line group-hover/bullet:text-gray-900 text-justify [hyphens:auto] transition-colors duration-300" 
+          dangerouslySetInnerHTML={{ __html: text }} 
+        />
+      </div>
+    </>
   );
 }
 
