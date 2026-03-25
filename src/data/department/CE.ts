@@ -102,26 +102,26 @@ export const CE = {
     ],
   },
 
-  curriculumOverview: {
-    eyebrow: "LEARNING PATH",
-    title: "Curriculum Overview",
-    text: "Our curriculum is structured to provide a balance between theoretical knowledge and practical application. It includes core engineering courses, specialized electives, and hands-on laboratory experiences.",
-    bullets: [
+  curriculum: {
+    eyebrow: "ACADEMIC JOURNEY",
+    title: "Program Curriculum",
+    description: "Our curriculum is structured to provide a balance between theoretical knowledge and practical application. It includes core engineering courses, specialized electives, and hands-on laboratory experiences.",
+    highlights: [
       "Strong foundation in Mathematics and Basic Sciences",
       "Comprehensive Core Civil Engineering Courses",
       "Specialized Electives in Various Tracks",
       "Integration of Design and Research Projects",
     ],
-  },
-
-  programCurriculum: {
-    eyebrow: "ACADEMIC MAP",
-    title: "Program Curriculum",
     years: [
       { year: "First Year", semesters: ["1st Semester", "2nd Semester"] },
       { year: "Second Year", semesters: ["1st Semester", "2nd Semester"] },
       { year: "Third Year", semesters: ["1st Semester", "2nd Semester"] },
       { year: "Fourth Year", semesters: ["1st Semester", "2nd Semester"] },
+    ],
+    tracks: [
+      { name: "Construction Engineering and Management", file: "Construction_Engineering_and_Management.pdf" },
+      { name: "Structural Engineering", file: "Structural_Engineering.pdf" },
+      { name: "Transportation Engineering", file: "Transportation_Engineering.pdf" },
     ],
   },
 

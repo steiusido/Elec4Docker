@@ -6,6 +6,7 @@ import { mergeDeptWithOverrides } from "../../lib/departmentAdmin";
 import { CE } from "../../data/department/CE";
 import CEIcon from "../../assets/CEicon.svg";
 import "../../styles/departments/CE.css";
+import type { NavId } from "../../types/CEnav";
 
 function FadeInSection({ children, className = "", delay = "" }: { children: ReactNode, className?: string, delay?: string }) {
   const [isVisible, setVisible] = useState(false);
@@ -166,14 +167,182 @@ function PEOSlider({ objectives }: { objectives: any[] }) {
   );
 }
 
+function SOSlider({ outcomes }: { outcomes: any[] }) {
+  const [current, setCurrent] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleNext = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrent((prev) => (prev + 1) % outcomes.length);
+      setIsAnimating(false);
+    }, 400);
+  };
+
+  const handlePrev = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrent((prev) => (prev - 1 + outcomes.length) % outcomes.length);
+      setIsAnimating(false);
+    }, 400);
+  };
+
+  const handleSelect = (idx: number) => {
+    if (isAnimating || idx === current) return;
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrent(idx);
+      setIsAnimating(false);
+    }, 400);
+  };
+
+  const currentOutcome = outcomes[current];
+
+  return (
+    <div className="relative max-w-5xl mx-auto mt-16">
+      {/* Decorative Grid/Blueprint background for the slider */}
+      <div className="absolute -inset-10 opacity-[0.05] pointer-events-none -z-10 overflow-hidden">
+        <div className="w-full h-full" style={{ backgroundImage: 'radial-gradient(#D4AF37 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
+      </div>
+
+      {/* Main Outcome Card */}
+      <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-[3rem] p-10 md:p-20 shadow-2xl overflow-hidden min-h-[500px] flex flex-col justify-center">
+        {/* Animated Background Indicator */}
+        <div className="absolute top-10 right-10 text-[12rem] font-black text-white/[0.03] select-none leading-none pointer-events-none uppercase italic transition-all duration-700">
+           {currentOutcome.title}
+        </div>
+
+        <div className={`transition-all duration-500 transform ${isAnimating ? 'opacity-0 translate-y-8 blur-sm' : 'opacity-100 translate-y-0 blur-0'}`}>
+          <div className="flex flex-col md:flex-row md:items-center gap-6 mb-12">
+            <div className="w-20 h-20 rounded-2xl ce-bg-gold flex items-center justify-center text-navy font-black text-4xl shadow-2xl shadow-gold-500/20">
+              {currentOutcome.title.toUpperCase()}
+            </div>
+            <div>
+              <div className="text-xs font-black ce-text-gold tracking-[0.4em] uppercase mb-2">Student Outcome</div>
+              <h3 className="text-3xl md:text-5xl font-black text-white tracking-tighter uppercase leading-tight italic">
+                {currentOutcome.subtitle}
+              </h3>
+            </div>
+          </div>
+
+          <div className="w-full h-[2px] bg-gradient-to-r from-gold-500/50 via-gold-500/20 to-transparent mb-12"></div>
+
+          <p className="text-xl md:text-2xl text-gray-300 leading-relaxed font-medium italic">
+            "{currentOutcome.text}"
+          </p>
+        </div>
+
+        {/* Navigation Controls */}
+        <div className="mt-16 flex flex-col md:flex-row items-center justify-between gap-8 pt-10 border-t border-white/10">
+          <div className="flex gap-4">
+            <button 
+              onClick={handlePrev}
+              className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center hover:ce-bg-gold hover:text-navy hover:border-transparent transition-all duration-300 group"
+              aria-label="Previous Outcome"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-1 transition-transform rotate-180"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            <button 
+              onClick={handleNext}
+              className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center hover:ce-bg-gold hover:text-navy hover:border-transparent transition-all duration-300 group"
+              aria-label="Next Outcome"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3">
+            {outcomes.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleSelect(idx)}
+                className={`w-3 h-3 rounded-full transition-all duration-500 ${
+                  current === idx ? "ce-bg-gold w-10" : "bg-white/20 hover:bg-white/40"
+                }`}
+                aria-label={`Go to outcome ${idx + 1}`}
+              />
+            ))}
+          </div>
+
+          <div className="text-xs font-black ce-text-gold tracking-widest uppercase hidden md:block">
+            {current + 1} <span className="text-white/20 mx-2">/</span> {outcomes.length}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TrackModal({ isOpen, onClose, tracks, base }: { isOpen: boolean, onClose: () => void, tracks: any[], base: string }) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center px-6">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-navy-900/80 backdrop-blur-sm ce-animate-fade-in"
+        onClick={onClose}
+      ></div>
+      
+      {/* Modal Content */}
+      <div className="relative bg-white rounded-[3rem] shadow-2xl w-full max-w-2xl overflow-hidden ce-animate-scale-in">
+        <div className="ce-bg-navy p-10 text-white relative">
+          <div className="absolute top-0 right-0 p-8">
+            <button onClick={onClose} className="text-white/40 hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+          <div className="text-sm font-black ce-text-gold tracking-[0.4em] uppercase mb-4">Specialization</div>
+          <h3 className="text-3xl font-black uppercase tracking-tighter italic">Choose your <span className="ce-text-gold">Track</span></h3>
+        </div>
+        
+        <div className="p-10 bg-gray-50">
+          <p className="text-gray-500 font-medium mb-8">Select a specialized field to download the corresponding program modules and curriculum details.</p>
+          
+          <div className="space-y-4">
+            {tracks.map((track, idx) => (
+              <a
+                key={idx}
+                href={`${base}/${track.file}`}
+                download
+                onClick={onClose}
+                className="flex items-center justify-between p-6 bg-white border border-gray-100 rounded-2xl hover:border-gold-300 hover:shadow-xl transition-all group"
+              >
+                <div className="flex items-center gap-6">
+                   <div className="w-12 h-12 rounded-xl ce-bg-light flex items-center justify-center text-navy font-black text-lg group-hover:ce-bg-gold transition-colors">
+                      0{idx + 1}
+                   </div>
+                   <span className="text-lg font-black ce-text-navy group-hover:ce-text-gold transition-colors">{track.name}</span>
+                </div>
+                <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-gray-300 group-hover:ce-bg-navy group-hover:text-white group-hover:border-transparent transition-all">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="p-8 bg-white border-t border-gray-100 text-center">
+           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Bulacan State University • College of Engineering</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CEPage() {
   const [baseDept] = useState<typeof CE>(CE);
   const [activeId, setActiveId] = useState<string>("home");
+  const [isTrackModalOpen, setIsTrackModalOpen] = useState(false);
 
   const dept = useMemo(
     () => mergeDeptWithOverrides(baseDept),
     [baseDept]
   );
+
+  const baseDir = "/departments/CE"; // Ensure baseDir is correct for downloads
 
   const heroImages = useMemo(() => dept.images.heroCarousel, [dept.images.heroCarousel]);
 
@@ -421,45 +590,14 @@ export default function CEPage() {
             <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter uppercase italic">
               {dept.so.title.split(' ')[0]} <span className="ce-text-gold">{dept.so.title.split(' ')[1]}</span>
             </h2>
-            <p className="text-gray-400 max-w-3xl mx-auto text-xl mb-24 font-medium leading-relaxed">
+            <p className="text-gray-400 max-w-3xl mx-auto text-xl mb-12 font-medium leading-relaxed">
               {dept.so.subtitle}
             </p>
           </FadeInSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {dept.so.outcomes.map((o: any, idx: number) => (
-              <FadeInSection 
-                key={idx} 
-                delay={`ce-delay-${(idx % 4) + 1}`} 
-                className="group relative bg-white/[0.03] backdrop-blur-sm border border-white/10 p-8 rounded-[2.5rem] hover:bg-white/[0.08] hover:border-gold-500/30 transition-all duration-500 flex flex-col h-full"
-              >
-                {/* Letter Indicator */}
-                <div className="absolute top-6 right-8 text-6xl font-black text-white/5 group-hover:text-gold-500/10 transition-colors duration-500 select-none">
-                  {o.title}
-                </div>
-
-                <div className="mb-6 flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl ce-bg-gold flex items-center justify-center text-navy font-black text-xl group-hover:scale-110 transition-transform duration-500 shadow-lg shadow-gold-500/20">
-                    {o.title.toUpperCase()}
-                  </div>
-                  <h3 className="text-lg font-black text-white uppercase tracking-tight leading-tight group-hover:ce-text-gold transition-colors">
-                    {o.subtitle}
-                  </h3>
-                </div>
-
-                <div className="h-[2px] w-12 ce-bg-gold/30 mb-6 group-hover:w-full transition-all duration-700"></div>
-
-                <p className="text-gray-400 group-hover:text-gray-200 leading-relaxed font-medium transition-colors">
-                  {o.text}
-                </p>
-
-                {/* Corner Accent */}
-                <div className="absolute bottom-0 right-0 w-12 h-12 overflow-hidden rounded-br-[2.5rem]">
-                   <div className="absolute bottom-0 right-0 w-0 h-0 border-b-[40px] border-r-[40px] border-transparent group-hover:border-r-gold-500/20 transition-all duration-500"></div>
-                </div>
-              </FadeInSection>
-            ))}
-          </div>
+          <FadeInSection delay="ce-delay-3">
+            <SOSlider outcomes={dept.so.outcomes} />
+          </FadeInSection>
 
           <div className="mt-24 p-12 rounded-[3rem] border border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent text-center">
              <p className="text-gray-500 font-bold italic text-lg max-w-4xl mx-auto">
@@ -469,73 +607,105 @@ export default function CEPage() {
         </div>
       </section>
 
-      {/* 4. Curriculum Overview */}
-      <section id="curriculum" className="max-w-6xl mx-auto px-6 py-32">
-        <div className="grid grid-cols-12 gap-20 items-center">
-          <div className="col-span-12 md:col-span-6">
-            <FadeInSection delay="ce-delay-1">
-              <div className="text-sm font-black ce-text-gold tracking-[0.3em] uppercase mb-6">{dept.curriculumOverview.eyebrow}</div>
-              <h2 className="text-4xl md:text-6xl font-black ce-text-navy leading-tight">{dept.curriculumOverview.title}</h2>
-              <p className="mt-8 text-xl text-gray-600 leading-relaxed">{dept.curriculumOverview.text}</p>
-            </FadeInSection>
+      {/* 4. Curriculum */}
+      <section id="curriculum" className="py-32 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col lg:flex-row gap-20 items-start">
+            {/* Left Column: Info & Highlights */}
+            <div className="lg:w-1/3">
+              <FadeInSection delay="ce-delay-1">
+                <div className="text-sm font-black ce-text-gold tracking-[0.4em] uppercase mb-6">{dept.curriculum.eyebrow}</div>
+                <h2 className="text-4xl md:text-6xl font-black ce-text-navy leading-tight uppercase tracking-tighter italic mb-8">
+                  {dept.curriculum.title.split(' ')[0]} <br />
+                  <span className="ce-text-gold">{dept.curriculum.title.split(' ')[1]}</span>
+                </h2>
+                <p className="text-lg text-gray-600 leading-relaxed font-medium mb-12">
+                  {dept.curriculum.description}
+                </p>
 
-            <ul className="mt-12 space-y-5">
-              {dept.curriculumOverview.bullets.map((b, idx) => (
-                <FadeInSection key={idx} delay={`ce-delay-${idx + 3}`} className="flex items-center gap-6 text-gray-700 font-bold group">
-                  <div className="w-4 h-4 rounded-full ce-bg-gold transition-transform group-hover:scale-125" />
-                  <span className="text-lg">{b}</span>
-                </FadeInSection>
-              ))}
-            </ul>
-          </div>
-
-          <div className="col-span-12 md:col-span-6">
-            <FadeInSection delay="ce-delay-4" className="relative group">
-              <div className="absolute -inset-2 bg-gradient-to-r from-[#D4AF37] to-[#1F3A4D] rounded-[3rem] blur-xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-              <div className="relative h-[450px] md:h-[550px] rounded-[3rem] bg-white border border-gray-100 flex items-center justify-center overflow-hidden shadow-2xl">
-                <img src={dept.images.watermark} alt="" className="w-[85%] opacity-5 select-none grayscale transition-all duration-1000 group-hover:scale-110 group-hover:rotate-6" />
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <span className="text-[12rem] font-black text-gray-100/30 tracking-tighter transition-all duration-700 group-hover:text-gray-200/50">CE</span>
-                </div>
-              </div>
-            </FadeInSection>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Program Curriculum */}
-      <section id="program-curriculum" className="ce-bg-light py-32">
-        <div className="max-w-6xl mx-auto px-6">
-          <FadeInSection delay="ce-delay-1">
-            <SectionTitle 
-              center 
-              eyebrow={dept.programCurriculum.eyebrow} 
-              title={dept.programCurriculum.title} 
-              subtitle="Explore our comprehensive 4-year curriculum designed for future civil engineers." 
-            />
-          </FadeInSection>
-          
-          <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {dept.programCurriculum.years.map((y, idx) => (
-              <FadeInSection key={idx} delay={`ce-delay-${idx + 2}`} className="group bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-300 border-t-[10px] ce-border-gold hover:-translate-y-3">
-                <h3 className="text-2xl font-black ce-text-navy mb-6 uppercase tracking-tight">{y.year}</h3>
-                <div className="space-y-4">
-                  {y.semesters.map((s, sIdx) => (
-                    <div key={sIdx} className="flex items-center gap-4 text-gray-500 font-bold group-hover:ce-text-gold transition-colors">
-                      <div className="w-2 h-2 rounded-full bg-gray-300 group-hover:ce-bg-gold transition-colors" />
-                      <span className="text-sm">{s}</span>
+                <div className="space-y-6">
+                  {dept.curriculum.highlights.map((h: string, idx: number) => (
+                    <div key={idx} className="flex items-center gap-4 group">
+                      <div className="w-10 h-10 rounded-xl ce-bg-light border border-gold-200 flex items-center justify-center text-gold-600 group-hover:ce-bg-gold group-hover:text-navy transition-all duration-300 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                      </div>
+                      <span className="text-gray-700 font-bold group-hover:ce-text-navy transition-colors">{h}</span>
                     </div>
                   ))}
                 </div>
-                  <button className="mt-10 text-xs font-black ce-text-gold hover:ce-text-navy transition-all uppercase tracking-widest flex items-center gap-2 group/btn">
-                    Course Details 
-                    <span className="transition-transform group-hover/btn:translate-x-1">&rarr;</span>
-                  </button>
+
+                <div className="mt-16 relative group hidden lg:block">
+                  <div className="absolute -inset-4 bg-navy-50 rounded-3xl -z-10 opacity-50"></div>
+                  <div className="p-8 border-2 border-dashed ce-border-gold/30 rounded-3xl">
+                     <div className="text-[10px] font-black ce-text-navy/40 uppercase tracking-[0.3em] mb-4 text-center">Architectural Blueprint</div>
+                     <div className="flex justify-center opacity-10 grayscale group-hover:grayscale-0 group-hover:opacity-20 transition-all duration-700">
+                        <img src={CEIcon} alt="" className="w-24 h-24" />
+                     </div>
+                  </div>
+                </div>
               </FadeInSection>
-            ))}
+            </div>
+
+            {/* Right Column: Year Cards */}
+            <div className="lg:w-2/3 w-full">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {dept.curriculum.years.map((y: any, idx: number) => (
+                    <FadeInSection 
+                      key={idx} 
+                      delay={`ce-delay-${idx + 2}`} 
+                      className="group bg-gray-50 p-10 rounded-[3rem] border border-transparent hover:bg-white hover:border-gold-300 hover:shadow-2xl transition-all duration-500 flex flex-col h-full"
+                    >
+                      <div className="flex justify-between items-start mb-8">
+                        <h3 className="text-2xl font-black ce-text-navy uppercase tracking-tight group-hover:ce-text-gold transition-colors">{y.year}</h3>
+                        <div className="text-4xl font-black text-gray-200 group-hover:text-gold-500/10 transition-colors italic">0{idx + 1}</div>
+                      </div>
+                      
+                      <div className="space-y-6 mb-10">
+                        {y.semesters.map((s: string, sIdx: number) => (
+                          <div key={sIdx} className="flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-100 group-hover:border-gold-100 transition-all shadow-sm">
+                            <span className="text-sm font-bold text-gray-500 group-hover:ce-text-navy uppercase tracking-widest">{s}</span>
+                            <div className="w-2 h-2 rounded-full ce-bg-gold opacity-30 group-hover:opacity-100"></div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <button 
+                        onClick={() => setIsTrackModalOpen(true)}
+                        className="mt-auto flex items-center gap-3 text-xs font-black ce-text-navy group-hover:ce-text-gold uppercase tracking-widest transition-all"
+                      >
+                        <span>View Modules</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                      </button>
+                    </FadeInSection>
+                  ))}
+               </div>
+
+               {/* Bottom CTA */}
+               <FadeInSection delay="ce-delay-6" className="mt-12 p-8 ce-bg-navy rounded-[2.5rem] flex flex-col md:flex-row items-center justify-between gap-8 group overflow-hidden relative">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-gold-500/10 transition-colors"></div>
+                  <div className="relative z-10">
+                    <h4 className="text-white font-black text-xl mb-2 uppercase tracking-tight">Full Curriculum Details</h4>
+                    <p className="text-white/50 text-sm font-medium">Download the official program curriculum PDF for detailed course descriptions.</p>
+                  </div>
+                  <button 
+                    onClick={() => setIsTrackModalOpen(true)}
+                    className="relative z-10 ce-bg-gold text-navy px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-gold-500/20"
+                  >
+                    Download PDF
+                  </button>
+               </FadeInSection>
+            </div>
           </div>
         </div>
       </section>
+
+      {/* Track Selection Modal */}
+      <TrackModal 
+        isOpen={isTrackModalOpen} 
+        onClose={() => setIsTrackModalOpen(false)} 
+        tracks={dept.curriculum.tracks} 
+        base={baseDir} 
+      />
 
       {/* 6. Career Opportunities */}
       <section id="careers" className="max-w-6xl mx-auto px-6 py-32">
