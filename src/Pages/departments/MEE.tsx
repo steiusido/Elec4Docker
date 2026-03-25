@@ -67,6 +67,8 @@ export default function MEEPage() {
           </div>
         </div>
 
+
+
         <div className="mt-8 grid grid-cols-12 gap-5">
 
           {/* LEFT BIG */}
@@ -270,88 +272,94 @@ export default function MEEPage() {
         </div>
       </section>
 
-      <section id="curriculum" className="max-w-6xl mx-auto px-6 pt-16">
-        <div className="grid grid-cols-12 gap-8 items-start">
-          <div className="col-span-12 md:col-span-6">
-            <div className="text-xs font-semibold text-gray-400 tracking-wide">
-              TAKE A TOUR
-            </div>
+<section id="curriculum" className="max-w-6xl mx-auto px-6 pt-16">
+  <div className="grid grid-cols-12 gap-8 items-stretch">
+    <div className="col-span-12 md:col-span-6">
+      <div className="text-xs font-semibold text-gray-400 tracking-wide">
+        TAKE A TOUR
+      </div>
 
-            <h2 className="mt-2 text-3xl font-extrabold text-gray-900">
-              {dept.curriculum.title}
-            </h2>
+      <h2 className="mt-2 text-3xl font-extrabold text-gray-900">
+        {dept.curriculum.title}
+      </h2>
 
-            {"subtitle" in dept.curriculum && dept.curriculum.subtitle && (
-              <p className="mt-2 text-sm font-medium text-gray-700">
-                {dept.curriculum.subtitle}
-              </p>
-            )}
+      {"subtitle" in dept.curriculum && dept.curriculum.subtitle && (
+        <p className="mt-2 text-sm font-medium text-gray-700">
+          {dept.curriculum.subtitle}
+        </p>
+      )}
 
-            <p className="mt-3 text-sm text-gray-500 leading-relaxed">
-              {dept.curriculum.text}
+      <p className="mt-3 text-sm text-gray-500 leading-relaxed">
+        {dept.curriculum.text}
+      </p>
+
+      {"structure" in dept.curriculum && dept.curriculum.structure && (
+        <p className="mt-3 text-sm text-gray-500 leading-relaxed">
+          {dept.curriculum.structure}
+        </p>
+      )}
+    </div>
+
+    <div className="col-span-12 md:col-span-6 flex">
+      <div className="w-full flex items-center justify-center">
+        <img
+          src={dept.images.watermark}
+          alt=""
+          className="w-[85%] md:w-[90%] object-contain select-none"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+    {dept.curriculum.years.map((year, idx) => (
+      <div
+        key={idx}
+        className="group relative rounded-2xl border border-gray-200 bg-white p-6 shadow-sm 
+                   transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+      >
+        {/* BACKGROUND LAYER */}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 rounded-2xl"
+          style={{ backgroundColor: "#1c638b" }}
+        />
+
+        {/* CONTENT */}
+        <div className="relative z-10">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-semibold text-gray-900 transition group-hover:text-white">
+              {year.title}
+            </h3>
+            <span className="h-3 w-3 rounded-full bg-[#1c638b] transition group-hover:bg-white" />
+          </div>
+
+          <p className="mt-2 text-sm text-gray-400 transition group-hover:text-blue-100">
+            Hover to view details
+          </p>
+
+          <div className="mt-4 h-px bg-gray-100 transition group-hover:bg-white/30" />
+
+          <div className="mt-4 max-h-0 overflow-hidden opacity-0 transition-all duration-500 group-hover:max-h-96 group-hover:opacity-100">
+            <p className="text-sm text-gray-600 transition group-hover:text-blue-100">
+              {year.description}
             </p>
 
-            {"structure" in dept.curriculum && dept.curriculum.structure && (
-              <p className="mt-3 text-sm text-gray-500 leading-relaxed">
-                {dept.curriculum.structure}
-              </p>
-            )}
-
-            <div className="mt-4 space-y-3">
-              {dept.curriculum.years.map((year, idx) => (
-                <div key={idx} className="rounded-xl overflow-hidden bg-white">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setOpenYear(openYear === idx ? null : idx)
-                    }
-                    className="w-full flex justify-between items-center px-4 py-3 text-left hover:bg-gray-50"
-                  >
-                    <span className="font-semibold text-gray-800">
-                      {year.title}
-                    </span>
-                    <span className="text-gray-500">
-                      {openYear === idx ? "−" : "+"}
-                    </span>
-                  </button>
-
-                  {openYear === idx && (
-                    <div className="px-4 pb-4 pt-1">
-                      <p className="text-sm text-gray-600 mt-1">
-                        {year.description}
-                      </p>
-
-                      <ul className="mt-3 space-y-2 text-sm text-gray-600">
-                        {year.bullets.map((b, i) => (
-                          <li key={i} className="flex items-start gap-2">
-                            <span
-                              className="w-2 h-2 rounded-full mt-1.5 shrink-0"
-                              style={{
-                                backgroundColor: dept.theme.accentHex,
-                              }}
-                            />
-                            <span>{b}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
+            <ul className="mt-3 space-y-2 text-sm text-gray-600">
+              {year.bullets.map((b, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#1c638b] group-hover:bg-white" />
+                  <span className="transition group-hover:text-white">
+                    {b}
+                  </span>
+                </li>
               ))}
-            </div>
-          </div>
-
-          <div className="col-span-12 md:col-span-6">
-            <div className="h-[360px] md:h-[420px] flex items-center justify-center rounded-2xl">
-              <img
-                src={dept.images.watermark}
-                alt=""
-                className="h-full w-auto object-contain select-none"
-              />
-            </div>
+            </ul>
           </div>
         </div>
-      </section>
+      </div>
+    ))}
+  </div>
+</section>
 
       <section id="laboratories" className="max-w-6xl mx-auto px-6 pt-16">
         <SectionTitle
