@@ -1,4 +1,5 @@
-import bulsuLogo from "../assets/bulsu.svg";
+import coeLogo from "../assets/COE.svg";
+import ceLogo from "../assets/CEicon.svg";
 import { Link } from "react-router-dom";
 
 export default function Footer() {
@@ -7,20 +8,27 @@ export default function Footer() {
             <div className="max-w-6xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-4 gap-16 items-start">
 
                 {/* LEFT - LOGO */}
-                <div className="space-y-6">
-                    <div className="flex items-center gap-4">
+                <div className="space-y-8">
+                    <div className="flex items-center gap-6">
                         <img
-                            src={bulsuLogo}
-                            alt="BULSU"
-                            className="w-12 h-12 brightness-0 invert"
+                            src={coeLogo}
+                            alt="COE"
+                            className="w-14 h-14 object-contain"
                         />
-                        <div className="font-black text-2xl tracking-tighter">
-                            BULSU <span className="ce-text-gold">COE</span>
-                        </div>
+                         <img
+                            src={ceLogo}
+                            alt="CE"
+                            className="w-14 h-14 object-contain"
+                        />
                     </div>
-                    <p className="text-gray-400 text-sm leading-relaxed">
-                        Leading the way in engineering excellence and innovation for a better tomorrow.
-                    </p>
+                    <div>
+                        <div className="font-black text-2xl tracking-tighter">
+                            BULSU <span className="ce-text-gold">CE</span>
+                        </div>
+                        <p className="mt-4 text-gray-400 text-sm leading-relaxed max-w-xs">
+                            Leading the way in engineering excellence and innovation for a better tomorrow.
+                        </p>
+                    </div>
                 </div>
 
                 {/* LINKS */}

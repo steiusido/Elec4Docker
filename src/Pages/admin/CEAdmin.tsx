@@ -14,7 +14,7 @@ import {
 import { mergeWithShape } from "../../lib/jsonShape";
 import type { DepartmentData } from "../../types/department";
 import AdminAccessGate from "../../components/AdminAccessGate";
-import JsonValueEditor from "../../components/JsonValueEditor";
+import JsonValueEditor from "../../components/CEJsonValueEditor";
 import ResizablePagePreview from "../../components/ResizablePagePreview";
 
 const code = "CE" as const;

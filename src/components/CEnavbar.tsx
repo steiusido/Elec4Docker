@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import COELogo from "../assets/COE.svg";
+import CEIcon from "../assets/CEicon.svg";
 import type { NavId } from "../types/nav";
 
 type NavbarProps = {
@@ -8,7 +8,7 @@ type NavbarProps = {
 };
 
 export default function Navbar({
-  logoSrc = COELogo,
+  logoSrc = CEIcon,
   onNav,
 }: NavbarProps) {
   const links = useMemo(
@@ -55,16 +55,8 @@ export default function Navbar({
           ))}
         </nav>
 
-        {/* Right contact */}
-        <div className="ml-auto">
-          <button
-            type="button"
-            onClick={() => onNav?.("contact")}
-            className="hidden md:inline-flex items-center justify-center px-8 py-2.5 rounded-full text-white text-xs font-black uppercase tracking-widest ce-bg-gold hover:bg-[#F2D94E] transition-colors shadow-lg"
-          >
-            Contact
-          </button>
-        </div>
+        {/* Right contact - REMOVED */}
+        <div className="ml-auto" />
       </div>
     </header>
   );
