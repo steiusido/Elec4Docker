@@ -125,10 +125,26 @@ export const CE = {
     ],
   },
 
-  laboratories: {
+  facilitiesAndActivities: {
     eyebrow: "RESOURCES",
-    title: "Laboratories",
+    title: "Facilities & Activities",
     description: "Empowering students through advanced experimental learning and cutting-edge research environments.",
+    facilitiesImages: [
+      `${base}/lab1.png`,
+      `${base}/lab2.png`,
+      `${base}/lab3.png`,
+      `${base}/lab4.png`,
+      `${base}/lab5.png`,
+      `${base}/lab6.png`,
+    ],
+    activitiesImages: [
+      `${base}/act1.png`,
+      `${base}/act2.png`,
+      `${base}/act3.png`,
+      `${base}/act4.png`,
+      `${base}/act5.png`,
+      `${base}/act6.png`,
+    ],
     items: ["Materials Testing Lab", "Geotechnical Engineering Lab", "Hydraulics and Water Resources Lab", "Surveying and Geomatics Lab"],
   },
 
@@ -136,8 +152,20 @@ export const CE = {
     eyebrow: "LEADERSHIP",
     title: "Faculty",
     members: [
-      { name: "Engr. Sample 1", role: "Chair" },
-      { name: "Engr. Sample 2", role: "Faculty" },
+      { name: "Engr. Joyce C. Evangelista", role: "Program Chair", image: `${base}/Evangelista.png` },
+      { name: "Engr. Maureen Therese A. Balayan", role: "Faculty", image: `${base}/Balayan.png` },
+      { name: "Engr. Romualdo S. Caluag", role: "Faculty", image: `${base}/Caluag.png` },
+      { name: "Engr. Camille Aira Espiritu", role: "Faculty", image: `${base}/Espiritu.png` },
+      { name: "Engr. Sarah M. Faustino", role: "Faculty", image: `${base}/Faustino.png` },
+      { name: "Dr. Cecilia A. Geronimo", role: "Faculty", image: `${base}/Geronimo.png` },
+      { name: "Engr. Renato G. Gopez", role: "Faculty", image: `${base}/Gopez.png` },
+      { name: "Engr. Radger Teddy L. Manuel", role: "Faculty", image: `${base}/Manuel.png` },
+      { name: "Engr. Resette Nicole L. Meneses", role: "Faculty", image: `${base}/Meneses.png` },
+      { name: "Engr. Merricris U. Pangilinan", role: "SIP Coordinator", image: `${base}/Pangilinan.png` },
+      { name: "Engr. Marbel D. Perez", role: "Faculty", image: `${base}/Perez.png` },
+      { name: "Engr. Jennie C. Roque", role: "Faculty", image: `${base}/Roque.png` },
+      { name: "Engr. Florence T. Samonte", role: "Faculty", image: `${base}/Samonte.png` },
+      { name: "Engr. June-June P. Santos", role: "Faculty", image: `${base}/Santos.png` },
     ],
   },
 

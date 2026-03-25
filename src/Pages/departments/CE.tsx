@@ -794,25 +794,39 @@ export default function CEPage() {
         </div>
       </section>
 
-      {/* Laboratories */}
+      {/* Facilities & Activities */}
       <section id="laboratories" className="ce-bg-light py-32">
          <div className="max-w-6xl mx-auto px-6">
             <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
                 <FadeInSection delay="ce-delay-1" className="text-left">
-                     <div className="text-sm font-black ce-text-gold tracking-[0.3em] uppercase mb-6">{dept.laboratories.eyebrow}</div>
-                    <h2 className="text-4xl md:text-6xl font-black ce-text-navy uppercase tracking-tight">{dept.laboratories.title}</h2>
+                     <div className="text-sm font-black ce-text-gold tracking-[0.3em] uppercase mb-6">{dept.facilitiesAndActivities.eyebrow}</div>
+                    <h2 className="text-4xl md:text-6xl font-black ce-text-navy uppercase tracking-tight">{dept.facilitiesAndActivities.title}</h2>
                 </FadeInSection>
-                <FadeInSection delay="ce-delay-2" className="text-gray-500 max-w-md text-lg font-medium italic">{dept.laboratories.description}</FadeInSection>
+                <FadeInSection delay="ce-delay-2" className="text-gray-500 max-w-md text-lg font-medium italic">{dept.facilitiesAndActivities.description}</FadeInSection>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {dept.laboratories.items.map((lab, idx) => (
-                <FadeInSection key={idx} delay={`ce-delay-${idx + 2}`} className="bg-white p-8 rounded-3xl shadow-sm hover:ce-bg-navy group transition-all duration-500 hover:-translate-y-2 cursor-pointer border border-gray-50">
-                <div className="text-[10px] font-black ce-text-gold group-hover:text-white/40 mb-4 tracking-[0.2em] uppercase">LABORATORY {idx + 1}</div>
-                <h3 className="text-xl font-bold ce-text-navy group-hover:text-white transition-colors leading-snug">{lab}</h3>
-                <div className="mt-6 w-8 h-1 ce-bg-gold group-hover:w-full transition-all duration-500"></div>
-                </FadeInSection>
-            ))}
+            <div className="space-y-32">
+              {/* Facilities Slider */}
+              <FadeInSection delay="ce-delay-3">
+                <div className="text-center mb-10">
+                  <div className="inline-block px-4 py-1 ce-bg-navy rounded-full text-[10px] font-black ce-text-gold uppercase tracking-[0.3em] mb-4">
+                    Laboratory Facilities
+                  </div>
+                  <h3 className="text-2xl font-black ce-text-navy uppercase italic">Engineering <span className="ce-text-gold">Spaces</span></h3>
+                </div>
+                <ImageStack images={dept.facilitiesAndActivities.facilitiesImages} />
+              </FadeInSection>
+
+              {/* Activities Slider */}
+              <FadeInSection delay="ce-delay-5">
+                <div className="text-center mb-10">
+                  <div className="inline-block px-4 py-1 ce-bg-navy rounded-full text-[10px] font-black ce-text-gold uppercase tracking-[0.3em] mb-4">
+                    Department Activities
+                  </div>
+                  <h3 className="text-2xl font-black ce-text-navy uppercase italic">Academic <span className="ce-text-gold">Life</span></h3>
+                </div>
+                <ImageStack images={dept.facilitiesAndActivities.activitiesImages} />
+              </FadeInSection>
             </div>
         </div>
       </section>
@@ -826,8 +840,20 @@ export default function CEPage() {
         <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-10">
           {dept.faculty.members.map((member, idx) => (
             <FadeInSection key={`${member.name}-${idx}`} delay={`ce-delay-${idx + 2}`} className="group flex items-center gap-8 bg-white p-10 rounded-[2.5rem] border-2 border-gray-50 hover:border-gold-300 transition-all hover:shadow-2xl hover:-translate-y-1">
-                <div className="w-20 h-20 rounded-2xl ce-bg-navy flex items-center justify-center text-white font-black text-3xl transition-transform group-hover:scale-110 group-hover:rotate-3 shadow-xl">
-                    {member.name.split(" ").pop()?.charAt(0)}
+                <div className="w-24 h-24 rounded-2xl ce-bg-navy flex items-center justify-center text-white font-black text-3xl transition-transform group-hover:scale-110 group-hover:rotate-3 shadow-xl overflow-hidden shrink-0 border-2 border-white">
+                    {member.image ? (
+                        <img 
+                          src={member.image} 
+                          alt={member.name} 
+                          className="w-full h-full object-cover" 
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                            (e.target as HTMLImageElement).parentElement!.innerHTML = member.name.split(" ").pop()?.charAt(0) || "E";
+                          }}
+                        />
+                    ) : (
+                        member.name.split(" ").pop()?.charAt(0)
+                    )}
                 </div>
                 <div>
                     <h3 className="font-black text-2xl ce-text-navy tracking-tight">{member.name}</h3>
