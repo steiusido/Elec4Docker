@@ -23,12 +23,85 @@ export const landingPageData = {
     },
     news: {
       id: "news",
-      title: "News",
+      title: "COE NEWS",
       assignedGroup: "Dela Cruz, Richter Vhon C",
       statusLabel: "RESERVED SECTION",
+      backgroundImage: "/images/news/news-bg.png",
+      overlayImage: "/images/news/news-overlay.png",
+
       items: [
-        { title: "Placeholder News 1", date: "2026-03-05" },
-        { title: "Placeholder News 2", date: "2026-03-05" },
+        {
+          image: "/images/news/featured-image.png",
+          label: "RECENT",
+          author: {
+            name: "Bong Lozada",
+            avatar: "/images/news/featured-image.png",
+          },
+          date: "March 5, 2026",
+          title: "Placeholder News 1",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        },
+        {
+          image: "/images/news/news-bg.png",
+          label: "RECENT",
+          author: {
+            name: "Bong Lozada",
+            avatar: "/images/news/news-bg.png",
+          },
+          date: "March 25, 2026",
+          title: "Placeholder News 2",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        },
+        {
+          image: "/images/news/news-bg.png",
+          label: "RECENT",
+          author: {
+            name: "Bong Lozada",
+            avatar: "/images/news/featured-image.png",
+          },
+          date: "February 5, 2026",
+          title: "Fourth to the Last News Placeholder",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        },
+        {
+          image: "/images/news/featured-image.png",
+          label: "RECENT",
+          author: {
+            name: "Bong Lozada",
+            avatar: "/images/news/featured-image.png",
+          },
+          date: "January 5, 2026",
+          title: "Third to the Last News Placeholder",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        },
+        {
+          image: "/images/news/news-bg.png",
+          label: "RECENT",
+          author: {
+            name: "Bong Lozada",
+            avatar: "/images/news/news-bg.png",
+          },
+          date: "December 5, 2025",
+          title: "Second to the Last News Placeholder",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        },
+        {
+          image: "/images/news/news-bg.png",
+          label: "RECENT",
+          author: {
+            name: "Bong Lozada",
+            avatar: "/images/news/featured-image.png",
+          },
+          date: "March 5, 2022",
+          title: "Latest / Last News Placeholder",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        },
       ],
     },
     facilities: {

@@ -30,17 +30,290 @@ function DepartmentGridSection({ data }: { data: Sections["departmentGrid"] }) {
 }
 
 function NewsSection({ data }: { data: Sections["news"] }) {
+  const sortedItems = useMemo(() => {
+    if (!data.items) return [];
+    return [...data.items].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [data.items]);
+
+  const featuredList = sortedItems.slice(0, 4) || [];
+  const [current, setCurrent] = useState(0);
+
+  const currentItem = featuredList[current];
+
+  const goTo = (index: number) => {
+    if (index >= 0 && index < featuredList.length) {
+      setCurrent(index);
+    }
+  };
+
   return (
-    <section id="news" className="max-w-6xl mx-auto px-6 py-10">
-      <SectionCard data={data}>
-        <div className="mt-3 space-y-1 text-sm text-gray-600">
-          {data.items.map((item, idx) => (
-            <p key={idx}>
-              {item.date} - {item.title}
-            </p>
-          ))}
+    <section id="news" className="bg-[#FCFCFD]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+        {/* Hero */}
+        <div className="relative bg-[#F4F5F6] rounded-t-[24px] overflow-hidden">
+          {/* Background Image */}
+          {data?.backgroundImage && (
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${data.backgroundImage})` }}
+            />
+          )}
+
+          {/* Gradient Overlay */}
+          {data?.overlayImage && (
+            <div
+              className="absolute inset-0 bg-cover bg-center opacity-80"
+              style={{ backgroundImage: `url(${data.overlayImage})` }}
+            />
+          )}
+
+          {/* Content */}
+          <div className="relative z-10 flex flex-col items-center justify-center text-center gap-8 px-4 py-10 sm:py-12">
+            {/* Frame */}
+            <div className="flex flex-col items-center gap-4">
+              {/* Hero Title */}
+              <h1
+                className="
+                  font-bold text-white tracking-[-0.02em]
+                  text-4xl leading-tight
+                  sm:text-5xl sm:leading-[1.1]
+                  md:text-6xl md:leading-[1.1]
+                  lg:text-[72px] lg:leading-20
+                "
+              >
+                {data?.title || "COE NEWS"}
+              </h1>
+            </div>
+          </div>
         </div>
-      </SectionCard>
+        {/* Featured News Card with Pagination */}
+        {currentItem && (
+          <div className="mt-8">
+            {/* CARD */}
+            <div className="relative w-full h-55 sm:h-80 md:h-105 lg:h-129.5 rounded-t-[6px] overflow-hidden">
+              {/* Image */}
+              <div
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: `url(${currentItem.image})` }}
+              />
+
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-black/60" />
+
+              <div className="absolute inset-0 flex flex-col justify-between p-3 sm:p-4">
+                {/* Badge */}
+                <div>
+                  <span className="inline-flex border border-[#EBEEF3] rounded-[3px] px-4 py-1 sm:mx-8 sm:my-4 text-[#EBEEF3] text-xs sm:text-sm md:text-base font-medium">
+                    {"RECENT"}
+                  </span>
+                </div>
+
+                {/* Text */}
+                <div className="text-white flex flex-col gap-2 sm:gap-3 max-w-3xl sm:px-8 overflow-hidden">
+                  {currentItem.date && (
+                    <p className="text-[#F9FAFC] text-xs sm:text-sm md:text-base">
+                      {currentItem.date}
+                    </p>
+                  )}
+
+                  {currentItem.title && (
+                    <h2
+                      className="font-bold uppercase text-[#F9FAFC]
+                      text-lg sm:text-xl md:text-2xl lg:text-[36px]
+                      md:leading-10.75 line-clamp-2"
+                    >
+                      {currentItem.title}
+                    </h2>
+                  )}
+
+                  {currentItem.description && (
+                    <p
+                      className="font-medium text-white
+                      text-sm sm:text-base md:text-lg lg:text-[20px]
+                      md:leading-7 line-clamp-3"
+                    >
+                      {currentItem.description}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* PAGINATION */}
+            {featuredList.length > 1 && (
+              <div className="flex items-center justify-center sm:justify-end sm:pr-8 gap-3 sm:gap-4 mt-6">
+                {/* PREV */}
+                <button
+                  onClick={() => goTo(current - 1)}
+                  disabled={current === 0}
+                  className={`
+                    w-12.5 h-10 sm:w-17.5 sm:h-12.5
+                    flex items-center justify-center rounded-[3px]
+                    ${current === 0 ? "bg-[#BAB8B8]" : "bg-[#262626] cursor-pointer hover:scale-110 transition duration-300"}
+                  `}
+                >
+                  <span className="border-2 border-[#EBEEF3] w-3 h-3 border-t-0 border-r-0 rotate-45" />
+                </button>
+
+                {/* NUMBERS */}
+                <div className="flex items-center gap-2 sm:gap-3">
+                  {featuredList.map((_, index) => {
+                    const isActive = index === current;
+
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => goTo(index)}
+                        className={`
+                          flex items-center justify-center
+                          w-7.5 h-7.5 sm:w-8.75 sm:h-8.75
+                          text-sm sm:text-base md:text-[24px]
+                          ${
+                            isActive
+                              ? "bg-[#262626] text-white rounded-full"
+                              : "text-[rgba(38,38,38,0.61)] cursor-pointer hover:scale-120"
+                          }
+                        `}
+                      >
+                        {index + 1}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* NEXT */}
+                <button
+                  onClick={() => goTo(current + 1)}
+                  disabled={current === featuredList.length - 1}
+                  className={`
+                    w-12.5 h-10 sm:w-17.5 sm:h-12.5
+                    flex items-center justify-center rounded-[3px]
+                    ${
+                      current === featuredList.length - 1
+                        ? "bg-[#BAB8B8]"
+                        : "bg-[#262626] cursor-pointer hover:scale-110 transition duration-300"
+                    }
+                  `}
+                >
+                  <span className="border-2 border-[#EBEEF3] w-3 h-3 border-b-0 border-l-0 rotate-45" />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* NEWS GRID SECTION */}
+        {sortedItems && (
+          <div className="mt-12">
+            {/* Heading */}
+            <h2
+              className="
+                font-bold text-[#262626]
+                text-xl sm:text-2xl md:text-[28px]
+                mb-6
+              "
+            >
+              COE NEWS
+            </h2>
+
+            {/* Grid */}
+            <div
+              className="
+                grid gap-6
+                grid-cols-1
+                sm:grid-cols-2
+                lg:grid-cols-3
+              "
+            >
+              {sortedItems.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col gap-3 hover:scale-105 transition-all duration-300 ease-out hover:shadow-lg p-3 rounded-lg"
+                >
+                  {/* Image Card */}
+                  <div className="relative w-full h-50 sm:h-55 md:h-62 rounded-[6px] overflow-hidden">
+                    {/* Image */}
+                    <div
+                      className="absolute inset-0 bg-cover bg-center"
+                      style={{ backgroundImage: `url(${item.image})` }}
+                    />
+
+                    {/* Optional dark overlay for readability */}
+                    <div className="absolute inset-0 bg-black/20" />
+
+                    {/* Label */}
+                    {item.label && (
+                      <div className="absolute top-2 right-2 border border-[#EBEEF3] rounded-lg px-2 py-0.5 bg-black/40">
+                        <span className="text-[#EBEEF3] text-[10px] sm:text-[12px] font-normal capitalize">
+                          {item.label}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* ✅ Avatar + Name */}
+                  {item.author && (
+                    <div className="flex items-center gap-3 mt-1">
+                      {/* Avatar */}
+                      <div
+                        className="w-11 h-11 rounded-full bg-cover bg-center"
+                        style={{
+                          backgroundImage: `url(${item.author.avatar})`,
+                        }}
+                      />
+
+                      {/* Name */}
+                      <span className="text-black text-sm font-medium tracking-[0.1px]">
+                        {item.author.name}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* ✅ TEXT CONTENT */}
+                  <div className="flex flex-col gap-1">
+                    {/* Date */}
+                    {item.date && (
+                      <p className="text-[rgba(38,38,38,0.6)] text-xs sm:text-sm font-medium">
+                        {item.date}
+                      </p>
+                    )}
+
+                    {/* Title */}
+                    {item.title && (
+                      <h3
+                        className="
+                          text-[#262626]
+                          font-semibold
+                          text-base sm:text-lg md:text-[22px]
+                          leading-snug
+                          line-clamp-2
+                        "
+                      >
+                        {item.title}
+                      </h3>
+                    )}
+
+                    {/* Description */}
+                    {item.description && (
+                      <p
+                        className="
+                          text-[#696868]
+                          font-medium
+                          text-sm sm:text-base
+                          leading-relaxed
+                          line-clamp-3
+                        "
+                      >
+                        {item.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </section>
   );
 }
