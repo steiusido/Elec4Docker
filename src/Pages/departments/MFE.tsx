@@ -437,8 +437,6 @@ export default function MFEPage() {
         </div>
       )}
 
-      <Footer />
-
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className={`fixed bottom-8 right-8 z-[100] flex items-center justify-center w-12 h-12 bg-zinc-950 text-white rounded-sm border border-white/10 shadow-2xl transition-all duration-500 hover:bg-[#26bac8] active:scale-90 group ${
