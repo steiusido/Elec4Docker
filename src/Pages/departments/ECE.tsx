@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../../components/navbar";
+import Navbar from "../../components/eceNavBar";
 import SectionTitle from "../../components/eceSectionTitle";
 import Footer from "../../components/Footer";
 import { mergeDeptWithOverrides } from "../../lib/departmentAdmin";
@@ -21,42 +21,76 @@ export default function ECEPage() {
   }, [selectedYearId, dept]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  const itemsPerPage = 3;
-  const outcomes = dept.so.outcomes;
-
-  const pages = [];
-  for (let i = 0; i < outcomes.length; i += itemsPerPage) {
-    pages.push(outcomes.slice(i, i + itemsPerPage));
-  }
-
-  const totalPages = pages.length;
+  const timerSORef = useRef<number | null>(null);
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % totalPages);
-  }, [totalPages]);
+    setCurrentIndex((prev) =>
+      prev < dept.so.outcomes.length - 1 ? prev + 1 : 0,
+    );
+  }, [dept.so.outcomes.length]);
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + totalPages) % totalPages);
+    setCurrentIndex((prev) =>
+      prev > 0 ? prev - 1 : dept.so.outcomes.length - 1,
+    );
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
+  const startSOAutoSlide = useCallback(() => {
+    if (timerSORef.current) window.clearInterval(timerSORef.current);
+    timerSORef.current = window.setInterval(() => {
       nextSlide();
     }, 5000);
-
-    return () => clearInterval(interval);
   }, [nextSlide]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    startSOAutoSlide();
+    return () => {
+      if (timerSORef.current) window.clearInterval(timerSORef.current);
+    };
+  }, [startSOAutoSlide]);
+
+  const timerRef = useRef<number | null>(null);
+
+  const startAutoSlide = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+
+    timerRef.current = setInterval(() => {
       setActiveIdx((prev) =>
         prev < dept.faculty.members.length - 1 ? prev + 1 : 0,
       );
     }, 5000);
-
-    return () => clearInterval(interval);
   }, [dept.faculty.members.length]);
+
+  useEffect(() => {
+    startAutoSlide();
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [startAutoSlide]);
+
+  const [careerIdx, setCareerIdx] = useState(0);
+  const timerCareerRef = useRef<number | null>(null);
+  const careerCards = dept?.careers?.cards || [];
+
+  const nextCareer = useCallback(() => {
+    setCareerIdx((prev) => (prev < careerCards.length - 1 ? prev + 1 : 0));
+  }, [careerCards.length]);
+
+  const prevCareer = () => {
+    setCareerIdx((prev) => (prev > 0 ? prev - 1 : careerCards.length - 1));
+  };
+
+  const startCareerAutoSlide = useCallback(() => {
+    if (timerCareerRef.current) window.clearInterval(timerCareerRef.current);
+    timerCareerRef.current = window.setInterval(nextCareer, 6000);
+  }, [nextCareer]);
+
+  useEffect(() => {
+    startCareerAutoSlide();
+    return () => {
+      if (timerCareerRef.current) window.clearInterval(timerCareerRef.current);
+    };
+  }, [startCareerAutoSlide]);
 
   useEffect(() => {
     if (!dept) return;
@@ -219,21 +253,21 @@ export default function ECEPage() {
           subtitle={dept.peo.subtitle}
         />
 
-        <div className="mt-8 grid grid-cols-12 gap-4 md:gap-8 items-center">
-          <div className="col-span-4 md:col-span-6">
-            <div className="h-[120px] md:h-[420px] rounded-2xl bg-transparent flex items-center justify-center overflow-hidden border-none">
+        <div className="mt-8 flex flex-col md:grid md:grid-cols-12 gap-6 md:gap-8 items-center">
+          <div className="w-full md:col-span-6 flex justify-center items-center">
+            <div className="w-full max-w-[200px] md:max-w-none h-auto md:h-[420px] flex items-center justify-center overflow-visible">
               <img
                 src={dept.images.ece_logo}
-                alt=""
-                className="h-full w-full object-contain select-none scale-100 md:scale-90"
+                alt="Department Logo"
+                className="w-full h-auto max-h-[180px] md:max-h-full object-contain select-none scale-100 md:scale-90"
               />
             </div>
           </div>
 
-          <div className="col-span-8 md:col-span-6">
-            <div className="space-y-3 md:space-y-5">
+          <div className="w-full md:col-span-6">
+            <div className="space-y-4 md:space-y-5">
               {dept.peo.bullets.map((b, idx) => (
-                <div key={idx} className="scale-90 md:scale-100 origin-left">
+                <div key={idx} className="scale-95 md:scale-100 origin-left">
                   <Bullet title={`PEO ${idx + 1}`} text={b} />
                 </div>
               ))}
@@ -244,7 +278,7 @@ export default function ECEPage() {
 
       <section
         id="so"
-        className="max-w-6xl mx-auto px-6 pt-10 md:pt-16 overflow-hidden"
+        className="max-w-4xl mx-auto px-6 pt-10 md:pt-16 overflow-hidden"
       >
         <SectionTitle
           center
@@ -253,68 +287,70 @@ export default function ECEPage() {
           subtitle={dept.so.subtitle}
         />
 
-        <div className="relative mt-8 md:mt-10">
-          <div
-            className="flex transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
-            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-          >
-            {pages.map((page, pIdx) => (
-              <div key={pIdx} className="w-full flex-shrink-0">
-                {/* Grid: 1 column sa mobile, 3 sa desktop. Gap-6 para may hingahan. */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-2 items-stretch">
-                  {page.map((o, idx) => (
-                    <div key={idx} className="flex flex-col h-full">
-                      {/* Siguraduhin na ang OutcomeCard component mo ay may class na 'h-full' 
-                  o 'flex-1' para sumunod sa taas ng pinakamahabang card.
-                */}
-                      <OutcomeCard title={o.title} text={o.text} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="relative mt-8 md:mt-12 h-[220px] md:h-[260px] overflow-hidden">
+          <div className="relative h-full flex flex-col items-center">
+            {dept.so.outcomes.map((o, idx) => {
+              const position = idx - currentIndex;
+              const isVisible = position === 0 || position === 1;
 
-          <div className="flex justify-between items-center mt-8 md:mt-12">
-            <button
-              onClick={prevSlide}
-              className="p-2 md:p-3 rounded-full border border-gray-100 bg-white shadow-sm text-[#2B1C50] hover:bg-[#8B65CF] hover:text-white transition-all flex items-center justify-center"
-            >
-              <ChevronLeft
-                size={20}
-                className="md:w-6 md:h-6"
-                strokeWidth={2.5}
-              />
-            </button>
+              if (!isVisible) return null;
 
-            <div className="flex gap-1.5 md:gap-2.5">
-              {pages.map((_, idx) => (
-                <button
+              return (
+                <div
                   key={idx}
-                  onClick={() => setCurrentIndex(idx)}
-                  className={`h-1.5 transition-all duration-300 rounded-full ${
-                    currentIndex === idx
-                      ? "w-6 md:w-10 bg-[#2B1C50]"
-                      : "w-1.5 md:w-2 bg-gray-200"
-                  }`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={nextSlide}
-              className="p-2 md:p-3 rounded-full border border-gray-100 bg-white shadow-sm text-[#2B1C50] hover:bg-[#8B65CF] hover:text-white transition-all flex items-center justify-center"
-            >
-              <ChevronRight
-                size={20}
-                className="md:w-6 md:h-6"
-                strokeWidth={2.5}
-              />
-            </button>
+                  className={`
+              absolute w-full transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]
+              ${
+                position === 0
+                  ? "z-20 opacity-100 translate-y-0 scale-100"
+                  : "z-10 opacity-30 translate-y-[100px] md:translate-y-[120px] scale-95"
+              }
+            `}
+                >
+                  <div
+                    onClick={() => {
+                      if (position === 1) {
+                        nextSlide();
+                        startSOAutoSlide();
+                      }
+                    }}
+                    className={`origin-left transition-transform duration-500 ${position === 1 ? "cursor-pointer" : ""}`}
+                  >
+                    <OutcomeCard title={o.title} text={o.text} />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
-      </section>
 
+        <div className="flex justify-between items-center mt-6">
+          <button
+            onClick={() => {
+              prevSlide();
+              startSOAutoSlide();
+            }}
+            className="p-2 md:p-3 rounded-full border border-gray-100 bg-white shadow-sm text-[#2B1C50] hover:bg-[#8B65CF] hover:text-white transition-all active:scale-90"
+          >
+            <ChevronLeft size={20} />
+          </button>
+
+          <div className="text-[10px] md:text-xs font-bold text-gray-400 tracking-widest uppercase">
+            <span className="text-[#2B1C50]">{currentIndex + 1}</span> /{" "}
+            {dept.so.outcomes.length}
+          </div>
+
+          <button
+            onClick={() => {
+              nextSlide();
+              startAutoSlide();
+            }}
+            className="p-2 md:p-3 rounded-full border border-gray-100 bg-white shadow-sm text-[#2B1C50] hover:bg-[#8B65CF] hover:text-white transition-all active:scale-90"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+      </section>
       <section
         id="curriculum"
         className="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-16"
@@ -523,11 +559,12 @@ export default function ECEPage() {
 
         <div className="relative mt-8 md:mt-12 group h-[400px] md:h-[500px] max-w-4xl mx-auto">
           <button
-            onClick={() =>
+            onClick={() => {
               setActiveIdx((prev) =>
                 prev > 0 ? prev - 1 : dept.faculty.members.length - 1,
-              )
-            }
+              );
+              startAutoSlide();
+            }}
             className="absolute left-0 md:left-5 top-1/2 -translate-y-1/2 z-50 bg-white/90 backdrop-blur-md p-2 md:p-3 rounded-full shadow-xl border border-gray-100 text-[#2B1C50] hover:bg-[#2B1C50] hover:text-white transition-all active:scale-90"
           >
             <span className="block transform rotate-180 text-[8px] md:text-[10px] font-bold">
@@ -536,11 +573,12 @@ export default function ECEPage() {
           </button>
 
           <button
-            onClick={() =>
+            onClick={() => {
               setActiveIdx((prev) =>
                 prev < dept.faculty.members.length - 1 ? prev + 1 : 0,
-              )
-            }
+              );
+              startAutoSlide();
+            }}
             className="absolute right-0 md:right-5 top-1/2 -translate-y-1/2 z-50 bg-white/90 backdrop-blur-md p-2 md:p-3 rounded-full shadow-xl border border-gray-100 text-[#2B1C50] hover:bg-[#2B1C50] hover:text-white transition-all active:scale-90"
           >
             <span className="text-[8px] md:text-[10px] font-bold">➜</span>
@@ -557,7 +595,10 @@ export default function ECEPage() {
               return (
                 <div
                   key={idx}
-                  onClick={() => setActiveIdx(idx)}
+                  onClick={() => {
+                    setActiveIdx(idx);
+                    startAutoSlide();
+                  }}
                   className={`
               absolute transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] cursor-pointer
               flex flex-col rounded-[1.5rem] md:rounded-[2rem] overflow-hidden border group/card
@@ -621,7 +662,10 @@ export default function ECEPage() {
           {dept.faculty.members.map((_, i) => (
             <button
               key={i}
-              onClick={() => setActiveIdx(i)}
+              onClick={() => {
+                setActiveIdx(i);
+                startAutoSlide();
+              }}
               className={`h-1 rounded-full transition-all duration-500 ${
                 activeIdx === i
                   ? "w-8 md:w-10 bg-[#2B1C50]"
@@ -634,7 +678,7 @@ export default function ECEPage() {
 
       <section
         id="careers"
-        className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 md:pt-16 pb-20"
+        className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 md:pt-16 pb-20 overflow-hidden"
       >
         <SectionTitle
           center
@@ -643,35 +687,85 @@ export default function ECEPage() {
           subtitle={dept.careers.subtitle}
         />
 
-        <div className="mt-8 grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 md:gap-8">
-          {dept.careers.cards.map((card, idx) => {
-            return (
+        <div className="relative mt-8 md:mt-12 group max-w-5xl mx-auto">
+          {/* MAIN CONTAINER: Full Gradient Blend from Purple to White */}
+          <div className="relative overflow-hidden rounded-[1.5rem] md:rounded-[2.5rem] border border-gray-100 shadow-2xl min-h-[550px] md:min-h-[450px] bg-gradient-to-br md:bg-gradient-to-r from-[#2B1C50] via-[#4A3482] to-white">
+            {careerCards.map((card, idx) => (
               <div
                 key={idx}
-                className="group relative p-[1.5px] md:p-[2px] rounded-xl md:rounded-2xl border border-gray-200 overflow-hidden transition-all duration-500 hover:scale-[1.03] md:hover:scale-105 hover:border-transparent hover:shadow-[0_0_20px_rgba(139,101,207,0.25)]"
+                className={`flex flex-col md:flex-row w-full h-full absolute inset-0 transition-all duration-1000 ease-in-out ${
+                  idx === careerIdx
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 translate-x-12 pointer-events-none"
+                }`}
               >
-                <div className="absolute inset-[-150%] bg-[conic-gradient(transparent,transparent,#8B65CF,#2B1C50,transparent)] animate-[spin_4s_linear_infinite] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                <div className="relative z-10 h-full w-full rounded-[11px] md:rounded-[14px] bg-white p-4 md:p-6 text-center flex flex-col items-center justify-center">
-                  <div className="flex justify-center" aria-hidden="true">
-                    {card.icon && (
-                      <span className="text-2xl md:text-4xl transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(139,101,207,0.8)]">
-                        {card.icon}
-                      </span>
-                    )}
+                <div className="w-full md:w-5/12 h-[250px] md:h-auto p-4 md:p-10 flex items-center justify-center relative">
+                  <div className="relative z-20 w-full h-full rounded-[1rem] md:rounded-[2rem] bg-[#1A1135] shadow-2xl overflow-hidden border border-white/10 group-hover:scale-[1.02] transition-transform duration-500">
+                    <img
+                      src={card.photo}
+                      alt={card.title}
+                      className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#2B1C50]/60 via-transparent to-transparent pointer-events-none" />
                   </div>
+                </div>
 
-                  <h3 className="mt-3 md:mt-4 font-bold text-gray-900 text-xs md:text-base transition-colors group-hover:text-[#2B1C50] leading-tight">
+                <div className="w-full md:w-7/12 p-6 md:p-12 lg:p-16 flex flex-col justify-center text-center md:text-left">
+                  <div className="font-bold text-2xl md:text-4xl lg:text-5xl text-[#2B1C50] transition-colors duration-300 group-hover:text-[#8B65CF] leading-[1.1] mb-4 md:mb-6">
                     {card.title}
-                  </h3>
-
-                  <p className="mt-2 text-[10px] md:text-sm text-gray-600 leading-tight md:leading-relaxed line-clamp-3 md:line-clamp-none">
+                  </div>
+                  <div className="w-12 md:w-16 h-1 md:h-1.5 bg-gradient-to-r from-[#8B65CF] to-[#2B1C50] rounded-full mb-6 md:mb-8 mx-auto md:mx-0 shadow-sm" />
+                  <p className="text-[#2B1C50]/80 text-sm md:text-lg lg:text-xl font-medium leading-relaxed max-w-md mx-auto md:mx-0">
                     {card.text}
                   </p>
+                  <div className="absolute bottom-4 right-8 md:bottom-6 md:right-10 text-[80px] md:text-[100px] font-black text-[#2B1C50] select-none -z-10 opacity-5">
+                    0{idx + 1}
+                  </div>
                 </div>
               </div>
-            );
-          })}
+            ))}
+          </div>
+
+          <div className="absolute top-1/2 -translate-y-1/2 -left-4 md:-left-12 z-30 hidden sm:block">
+            <button
+              onClick={() => {
+                prevCareer();
+                startCareerAutoSlide();
+              }}
+              className="p-3 md:p-4 rounded-full bg-white shadow-xl text-[#2B1C50] hover:scale-110 transition-all border border-gray-100 active:scale-95"
+            >
+              <ChevronLeft size={24} className="md:w-[28px] md:h-[28px]" />
+            </button>
+          </div>
+
+          <div className="absolute top-1/2 -translate-y-1/2 -right-4 md:-right-12 z-30 hidden sm:block">
+            <button
+              onClick={() => {
+                nextCareer();
+                startCareerAutoSlide();
+              }}
+              className="p-3 md:p-4 rounded-full bg-white shadow-xl text-[#2B1C50] hover:scale-110 transition-all border border-gray-100 active:scale-95"
+            >
+              <ChevronRight size={24} className="md:w-[28px] md:h-[28px]" />
+            </button>
+          </div>
+        </div>
+
+        <div className="flex justify-center gap-3 mt-8 md:mt-12">
+          {careerCards.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                setCareerIdx(i);
+                startCareerAutoSlide();
+              }}
+              className={`h-1.5 md:h-2 rounded-full transition-all duration-500 ${
+                i === careerIdx
+                  ? "w-8 md:w-12 bg-[#2B1C50]"
+                  : "w-2 md:w-3 bg-gray-200"
+              }`}
+            />
+          ))}
         </div>
       </section>
       <section
@@ -702,12 +796,12 @@ export default function ECEPage() {
                 />
               </div>
 
-              <div className="space-y-1">
+              <div className="space-y-1 gap-1">
                 <h2 className="mt-2 text-3xl md:text-4xl font-black uppercase italic bg-gradient-to-r from-[#2B1C50] via-[#5A418E] to-[#8B65CF] bg-clip-text text-transparent leading-tight">
                   College of Engineering
                 </h2>
                 <p className="text-[#2B1C50] font-bold text-md md:text-lg">
-                  Electronics and Communication Engineering
+                  Electronics Engineering
                 </p>
                 <p className="text-gray-500 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em]">
                   Bulacan State University
@@ -720,7 +814,7 @@ export default function ECEPage() {
 
             <div className="flex flex-col items-center md:items-end text-center md:text-right w-full md:w-auto">
               <span className="inline-block text-[12px] md:text-[14px] font-black text-white uppercase tracking-[0.2em] mb-4 bg-gradient-to-r from-[#2B1C50] to-[#8B65CF] border border-[#8B65CF]/20 px-4 py-1.5 rounded-full shadow-lg">
-                Department Head
+                Program Chair
               </span>
               <h3 className="mt-2 text-xl md:text-xl font-black uppercase italic bg-gradient-to-r from-[#2B1C50] via-[#5A418E] to-[#8B65CF] bg-clip-text text-transparent leading-tight">
                 Engr. Donald M. Lapiguera
@@ -730,7 +824,7 @@ export default function ECEPage() {
                 className="text-gray-600 font-semibold text-sm md:text-base hover:text-[#8B65CF] transition-colors flex items-center gap-2 group break-all"
               >
                 <span className="border-b border-transparent group-hover:border-[#8B65CF]">
-                  donald.lapiguera@ms.bulsu.edu.ph
+                  donald.lapiguera@bulsu.edu.ph
                 </span>
                 <span className="group-hover:translate-x-1 transition-transform hidden md:inline text-[#8B65CF]">
                   →
@@ -785,14 +879,19 @@ function Bullet({ title, text }: { title: string; text: string }) {
 
 function OutcomeCard({ title, text }: { title: string; text: string }) {
   return (
-    <div className="group relative p-[2px] rounded-2xl border border-gray-200 overflow-hidden transition-all duration-500 hover:scale-105 hover:border-transparent hover:shadow-[0_0_25px_rgba(139,101,207,0.3)]">
-      <div className="absolute inset-[-150%] bg-[conic-gradient(transparent,transparent,#8B65CF,#2B1C50,transparent)] animate-[spin_4s_linear_infinite] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-      <div className="relative z-10 h-full w-full rounded-[14px] bg-white p-6 text-center">
-        <div className="mt-4 inline-flex items-center justify-center min-w-[3rem] px-4 py-4 rounded-full bg-[#8B65CF]/10 backdrop-blur-md border border-[#8B65CF]/20 font-semibold text-gray-900 transition-all duration-500 group-hover:bg-[#2B1C50]/80 group-hover:text-white group-hover:border-[#2B1C50] group-hover:shadow-[0_8px_20px_rgba(43,28,80,0.2)]">
-          <span className="text-sm leading-none">{title}</span>
+    <div className="group relative w-full p-4 md:p-6 bg-white rounded-2xl border border-gray-100 border-l-4 border-l-[#2B1C50] transition-all duration-300 hover:shadow-[0_10px_30px_-15px_rgba(43,28,80,0.2)] hover:shadow-lg origin-left">
+      <div className="flex flex-row items-start md:items-center gap-3 md:gap-4">
+        <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-[#8B65CF]/10 backdrop-blur-md border border-[#8B65CF]/20 transition-all duration-500 group-hover:bg-[#2B1C50] group-hover:border-[#2B1C50] group-hover:shadow-[0_8px_20px_rgba(43,28,80,0.2)]">
+          <span className="text-[10px] md:text-xs font-bold text-[#2B1C50] text-center leading-none transition-colors duration-500 group-hover:text-white">
+            {title}
+          </span>
         </div>
-        <div className="mt-2 text-sm text-gray-500 leading-relaxed">{text}</div>
+
+        <div className="flex-1 min-w-0">
+          <p className="text-gray-600 text-[11px] md:text-xl leading-relaxed italic break-words">
+            {text}
+          </p>
+        </div>
       </div>
     </div>
   );
