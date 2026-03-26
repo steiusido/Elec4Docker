@@ -341,7 +341,37 @@ export const landingPageData = {
       title: "Facilities",
       assignedGroup: "Jones, Colleen Iris P",
       statusLabel: "RESERVED SECTION",
-      highlights: ["Placeholder Facility 1", "Placeholder Facility 2"],
+      highlights: ["Lorem", "Ispum", "Dolor"],
+      images: [
+        { 
+          url: "/departments/MFE/facilities/COE2.png", 
+          caption: "Facility 1" 
+        },
+        { 
+          url: "/departments/MFE/facilities/COE2-204.png",  
+          caption: "Facility 2" 
+        },
+        { 
+          url: "/departments/MFE/facilities/COE2-07.png", 
+          caption: "Facility 3"  
+        },
+        { 
+          url: "/departments/MFE/facilities/NATIVIDAD.png", 
+          caption: "Facility 4" 
+        },
+        { 
+          url: "/departments/MFE/facilities/NH401.png", 
+          caption: "Facility 5" 
+        },
+        { 
+          url: "/departments/MFE/facilities/NH402.png", 
+          caption: "Facility 6" 
+        },
+        { 
+          url: "/departments/MFE/facilities/NH403.png", 
+          caption: "Facility 7" 
+        },
+      ],
     },
     statistics: {
       id: "statistics",
