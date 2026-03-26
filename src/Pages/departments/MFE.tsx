@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import MFENavbar from "../../components/MFEnavbar";
 import SectionTitle from "../../components/SectionTitle";
@@ -60,8 +60,10 @@ const AnimatedStat = ({ value, label, Component }: AnimatedStatProps) => {
 
 export default function MFEPage() {
   const [baseDept] = useState<typeof MFE>(MFE);
-  // FIX 1: ADD ACTIVE ID STATE
   const [activeId, setActiveId] = useState<string>("home");
+  
+  // FIX 1: ADDED REF TO PREVENT CLICK/SCROLL FIGHTING
+  const isClickScrolling = useRef(false);
   
   const deptWithNewAccent = useMemo(() => ({
     ...baseDept,
@@ -70,31 +72,38 @@ export default function MFEPage() {
 
   const dept = useMemo(() => mergeDeptWithOverrides(deptWithNewAccent), [deptWithNewAccent]);
 
-  // FIX 2: ADD INTERSECTION OBSERVER (So red line on activeId goes away and nav actually works)
+  // FIX 1: UPDATED SCROLL LOGIC TO DETECT BOTTOM OF PAGE
   useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '-20% 0px -70% 0px',
-      threshold: 0
-    };
+    const handleScroll = () => {
+      if (isClickScrolling.current) return;
 
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setActiveId(entry.target.id);
+      const sections = ["home", "stats", "peo", "so", "curriculum", "laboratories", "faculty", "contact"];
+      
+      // Check if we are at the very bottom of the page
+      const isAtBottom = window.innerHeight + Math.round(window.scrollY) >= document.body.offsetHeight - 50;
+      if (isAtBottom) {
+        setActiveId("contact");
+        return;
+      }
+
+      // Normal section tracking
+      let currentSection = sections[0];
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          // Adjust threshold (200px from top) to trigger highlighting earlier
+          if (rect.top <= 200) { 
+            currentSection = section;
+          }
         }
-      });
+      }
+      setActiveId(currentSection);
     };
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-    const sections = ["home", "stats", "peo", "so", "curriculum", "laboratories", "faculty", "careers", "contact"];
-    
-    sections.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initialize on mount
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
@@ -105,9 +114,22 @@ export default function MFEPage() {
     if (link) link.href = `/icons/${dept.code.toLowerCase()}.svg`;
   }, [dept]);
 
+  // FIX 1: UPDATED ONNAV TO SET ID IMMEDIATELY AND PAUSE OBSERVER
   const onNav = (id: string) => {
+    setActiveId(id);
+    isClickScrolling.current = true;
+    
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (el) {
+      // 80 is the offset for your fixed navbar
+      const y = el.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+
+    // Re-enable scroll listener after 1 second
+    setTimeout(() => {
+      isClickScrolling.current = false;
+    }, 1000);
   };
 
   const [selectedLab, setSelectedLab] = useState<null | { name: string; image: string }>(null);
@@ -121,6 +143,9 @@ export default function MFEPage() {
         .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(229, 231, 235, 0.8); }
         .hover-lift { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .hover-lift:hover { transform: translateY(-5px); }
+        /* Hide scrollbar for horizontal sections but keep functionality */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       <MFENavbar onNav={onNav as any} activeId={activeId} />
@@ -378,9 +403,11 @@ export default function MFEPage() {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-24">
+
+        {/* FIX 2: FACULTY GRID TO HORIZONTAL SCROLL ON MOBILE */}
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-24 no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-3 md:snap-none md:overflow-visible px-4 md:px-0 -mx-4 md:mx-0">
           {dept.faculty.members.map((member, idx) => (
-            <div key={idx} className="group relative flex items-start gap-5 p-6 bg-white border border-slate-100 transition-all duration-300 hover:border-black hover:shadow-xl hover:-translate-y-1">
+            <div key={idx} className="min-w-[85vw] sm:min-w-[60vw] md:min-w-0 snap-center group relative flex items-start gap-5 p-6 bg-white border border-slate-100 transition-all duration-300 hover:border-black hover:shadow-xl hover:-translate-y-1">
               <div className="relative shrink-0 w-20 h-20 md:w-24 md:h-24 bg-slate-50 border border-slate-100 overflow-hidden transition-all duration-500 group-hover:border-black">
                 {member.image ? <img src={member.image} alt={member.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" /> : <div className="absolute inset-0 flex items-center justify-center bg-slate-50"><span className="text-slate-200 font-black italic text-xl">{dept.code}</span></div>}
               </div>
