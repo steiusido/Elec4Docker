@@ -28,7 +28,6 @@ export default function MFEnavbar({ onNav, activeId }: NavProps) {
 
   const navItems = [
     { id: "home", label: "Home" },
-    { id: "stats", label: "Stats" },
     { id: "peo", label: "Objectives" },
     { id: "so", label: "Outcomes" },
     { id: "curriculum", label: "Curriculum" },
