@@ -1,13 +1,16 @@
-FROM node:22-bookworm-slim
-
+# Stage 1: Build
+FROM node:18 AS builder
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package*.json ./
+RUN npm install
 
 COPY . .
 RUN npm run build
 
-EXPOSE 4173
+# Stage 2: Serve
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-CMD ["npm", "start"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
