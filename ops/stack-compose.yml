@@ -1,0 +1,7 @@
+services:
+  main-app:
+    image: ${IMAGE_SOURCE}
+    container_name: elec4-production
+    restart: always
+    ports:
+      - "127.0.0.1:4173:4173"

@@ -82,7 +82,7 @@ export default function Footer() {
               <p className="opacity-60 italic">{footerData.operatingHours}</p>
             </div>
             <div className="pt-2 flex gap-3">
-              {footerData.socialLinks.map((social) => (
+              {footerData.socialLinks.map((social: any) => (
                 <a
                   key={social.label}
                   href={social.href}
@@ -103,7 +103,7 @@ export default function Footer() {
           <div className="md:col-span-2">
             <h4 className="font-bold text-yellow-300 uppercase tracking-widest text-xs mb-4">Navigation</h4>
             <ul className="space-y-2 text-xs uppercase">
-              {footerData.linkPreviews.quickNav.map((item) => (
+              {footerData.linkPreviews.quickNav.map((item: any) => (
                 <li key={item.label}>
                   <a href={item.href} className={linkHoverClass}>
                     {item.label}
@@ -117,7 +117,7 @@ export default function Footer() {
           <div className="md:col-span-4">
             <h4 className="font-bold text-yellow-300 uppercase tracking-widest text-xs mb-4">Departments</h4>
             <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-              {footerData.linkPreviews.departments.map((dept) => (
+              {footerData.linkPreviews.departments.map((dept: any) => (
                 <li key={dept.label}>
                   <Link to={dept.href} className={linkHoverClass}>
                     {dept.label}
